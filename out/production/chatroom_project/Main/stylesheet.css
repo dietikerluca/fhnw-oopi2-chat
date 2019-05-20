@@ -1,0 +1,158 @@
+
+#SendButton {
+    -fx-background-color: #1753E8;
+    -fx-text-fill: white;
+    -fx-background-radius: 16;
+    -fx-min-height: 30;
+    -fx-min-width: 80;
+}
+
+#SendButton:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #1753E8;
+    -fx-font-weight: bold;
+}
+
+/* Formatting message bubbles
+   ----------------------------- */
+
+#MessageBoxSent {
+    -fx-background-color: #1a53ff;
+    -fx-background-radius: 16;
+    -fx-alignment: center;
+}
+
+#MessageBoxReceived {
+    -fx-background-color: #C1C1C1;
+    -fx-background-radius: 16;
+    -fx-alignment: center;
+}
+
+#MessageBubbleContainerSent {
+    -fx-alignment: center-right;
+    -fx-padding: 5 0 0 0;
+}
+
+#MessageBubbleContainerReceived {
+    -fx-alignment: center-left;
+    -fx-padding: 5 0 0 0;
+}
+#MessageText {
+    -fx-text-fill: white;
+    -fx-font-size: 10pt;
+    -fx-font-family: "Tahoma";
+}
+
+#ScrollPaneMessagesBubbles {
+    -fx-padding: 5 5 5 5;
+    -fx-min-width: 500;
+}
+#ScrollPaneMessagesBubbles:focused {
+    -fx-padding: 5 5 5 5;
+    -fx-focus-color: null;
+}
+
+
+
+/*General Buttons*/
+
+#closeBtn{
+    -fx-background-color: #FF5353;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #FF5353;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+#closeBtn:hover {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #FF5353;
+    -fx-border-color: #FF5353;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+
+
+/*Interaction Ribbon Styling*/
+
+#InteractionRibbonBox {
+    -fx-background-color: #EDEDED;
+    -fx-min-height: 45;
+    -fx-min-height: 45;
+
+}
+.text-field {
+    -fx-background-color: #a9a9a9 , white , white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+    -fx-text-fill: #C1C1C1;
+    -fx-background-radius: 16;
+    -fx-min-height: 30;
+    -fx-min-height: 30;
+    -fx-min-width: 350;
+    -fx-max-width: 350;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 10pt;
+}
+
+.text-field:focused {
+    -fx-background-color: #1753E8 , white , white;
+    -fx-background-insets: 0 0 -3 0, 0 0 0 0, 0 -1 3 -1;
+    -fx-text-fill: #4F4F4F;
+}
+
+
+/*Contact Cards*/
+#ContactListCardContainer {
+    -fx-alignment: Center-left;
+    -fx-padding: 10 10 10 15;
+    -fx-spacing: 25;
+}
+
+#TextContactCard {
+    -fx-font-family: Tahoma;
+    -fx-font-size: 10pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+#TextContactCardSecond {
+    -fx-text-fill: #3C3C3C;
+}
+
+#ContactCardTextContainer {
+    -fx-spacing: 3;
+}
+
+#ContactsWindowScrollPane {
+    -fx-min-width: 250;
+}
+#ContactsWindowScrollPane:focused {
+    -fx-focus-color: null;
+}
+#ContactsWindowList {
+    -fx-min-width: 250;
+}
+#ContactsWindowList:focused {
+    -fx-focus-color: null;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #DFDFDF;
+    -fx-text-fill: black;
+}
+.list-cell:hover {
+    -fx-background-color: #F5F5F5;
+}
+
+
+
+
+/*Menues*/
+
+.menu {
+
+}
+
+
+
