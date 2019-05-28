@@ -3,21 +3,54 @@ package Main;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.File;
 
 public class MainMenu extends MenuBar {
 
     Menu messenger, file, window, help;
-    MenuItem login, logout, profile, preferences, quit, newChat, newChatRoom, joinChatRoom, zoom
-            , newWindow, updates, guidance, testReceived, testContact, createContact;
+    MenuItem login, logout, profile, preferences, quit, newChat, newChatRoom, joinChatRoom, zoom, createContact
+            , newWindow, updates, guidance, testReceived, testContact, reportError;
+    ImageView chevronView, chevronView1, chevronView2, chevronView3;
 
     //Translator for Translating
     Translator t = ServiceLocator.getServiceLocator().getTranslator();
 
     public MainMenu(){
-        messenger = new Menu();
-        file = new Menu();
-        window = new Menu();
-        help = new Menu();
+
+        /*Read icons
+        * -------------------------------*/
+        /*Load Image
+         * ----------------------------------------*/
+        try {
+            String url = System.getProperty("user.dir");
+            url += "/src/Image/chevron_down.png";
+            File chevronFile = new File(url);
+            url = chevronFile.toURI().toURL().toString();
+            Image chevronDown = new Image(url);
+            chevronView = new ImageView(chevronDown);
+            chevronView.setFitHeight(20);
+            chevronView.setFitWidth(20);
+            chevronView1 = new ImageView(chevronDown);
+            chevronView1.setFitHeight(20);
+            chevronView1.setFitWidth(20);
+            chevronView2 = new ImageView(chevronDown);
+            chevronView2.setFitHeight(20);
+            chevronView2.setFitWidth(20);
+            chevronView3 = new ImageView(chevronDown);
+            chevronView3.setFitHeight(20);
+            chevronView3.setFitWidth(20);
+        } catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        messenger = new Menu("", chevronView);
+        file = new Menu("", chevronView1);
+        window = new Menu("", chevronView2);
+        help = new Menu("", chevronView3);
 
         login = new MenuItem(t.getString("mainmenu.Login"));
         logout = new MenuItem(t.getString("mainmenu.Logout"));
@@ -41,10 +74,11 @@ public class MainMenu extends MenuBar {
 
         window.getItems().addAll(zoom, newWindow);
 
-        updates = new MenuItem(t.getString("mainmenu.WriteDeveloper"));
-        guidance = new MenuItem(t.getString("mainmenu.Guidance"));
+        updates = new MenuItem(t.getString("mainmenu.WriteDeveloper")); //TODO
+        guidance = new MenuItem(t.getString("mainmenu.Guidance")); //TODO
+        reportError = new MenuItem(t.getString("mainmenu.reportError")); //TODO
 
-        help.getItems().addAll(updates, guidance);
+        help.getItems().addAll(updates, guidance, reportError);
 
         //Update texts
         updateTexts();

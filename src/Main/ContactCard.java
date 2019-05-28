@@ -14,12 +14,12 @@ public class ContactCard extends HBox {
 
     public ContactCard(Contact contact){
         this.contact = contact;
-        this.setId("ContactListCardContainer");
+        this.getStyleClass().add("ContactCard");
         this.contactInfoContainer = new VBox();
         this.contactInfoContainer.setId("ContactCardTextContainer");
         this.status = new Ellipse(5,5); //TODO
         this.status.setFill(Color.GREEN); //TODO
-        this.name = new Label(contact.getPrename()+" "+contact.getSurname()); //TODO
+        this.name = new Label(contact.getPrename()+" "+contact.getLastname()); //TODO
         this.name.setId("TextContactCard");
         this.secondText = new Label("Last seen: 22.06.2019"); //TODO
         this.secondText.setId("TextContactCardSecond");

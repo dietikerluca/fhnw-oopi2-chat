@@ -13,9 +13,8 @@ public class ServiceLocator {
     final private Locale[] locales = new Locale[] { new Locale("en"), new Locale("de") };
 
     //Default Values User has set
-    private boolean ipPreset = false;
-    private boolean portPreset = false;
-    private int ipAddressPreset, port;
+    private String ipAddressPreset = "192.168.1.0";
+    private int port = 82;
 
     private Logger logger;
     private Configuration configuration;
@@ -26,6 +25,14 @@ public class ServiceLocator {
         if (serviceLocator == null)
             serviceLocator = new ServiceLocator();
         return serviceLocator;
+    }
+
+    public void setIpAddressPreset(String ipAddressPreset) {
+        this.ipAddressPreset = ipAddressPreset;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     private ServiceLocator() {
@@ -70,25 +77,8 @@ public class ServiceLocator {
         this.translator = translator;
     }
 
-    public void setIpPreset(int ipAddress){
-        ipAddressPreset = ipAddress;
-        ipPreset = true;
-    }
 
-    public void setPortPreset(int port){
-        port = port;
-        portPreset = true;
-    }
-
-    public boolean isIpPreset() {
-        return ipPreset;
-    }
-
-    public boolean isPortPreset() {
-        return portPreset;
-    }
-
-    public int getIpAddressPreset() {
+    public String getIpAddressPreset() {
         return ipAddressPreset;
     }
 

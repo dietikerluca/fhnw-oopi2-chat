@@ -6,35 +6,16 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     Messenger model;
-    View view;
-    Controller controller;
-    ServiceLocator serviceLocator;
+    Boolean login = false;
 
 
     public void start(Stage primaryStage) {
-        Stage mainStage = new Stage();
-        // Initialize the GUI
-        model = new Messenger();
-        view = new View(mainStage, model);
-        controller = new Controller(model, view);
 
-        serviceLocator = ServiceLocator.getServiceLocator();
+        /*Initialize Splash Screen
+        * ----------------------------------------------*/
+        SplashScreen splashScreen = new SplashScreen();
 
-        // Display the GUI after all initialization is complete
-        view.start();
 
-    }
-
-    public void startApp(){
-
-        Stage mainStage = new Stage();
-        // Initialize the GUI
-        model = new Messenger();
-        view = new View(mainStage, model);
-        controller = new Controller(model, view);
-
-        // Display the GUI after all initialization is complete
-        view.start();
     }
 
 

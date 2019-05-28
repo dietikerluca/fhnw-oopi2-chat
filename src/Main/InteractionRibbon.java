@@ -21,6 +21,7 @@ public class InteractionRibbon extends HBox {
 //        TODO Update Texts
 //        Finish
         messageField = new TextField();
+        messageField.setId("MessageTextField");
         sendBtn = new Button(tr.getString("interactionRibbon.messageSendBtn"));
         sendBtn.setId("SendButton");
 

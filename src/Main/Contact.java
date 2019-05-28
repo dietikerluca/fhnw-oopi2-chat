@@ -4,20 +4,31 @@ import java.util.ArrayList;
 
 public class Contact {
 
-    private String name, surname;
+    private String name, lastname, nickname;
     private String username;
     private boolean inContactList;
     private ArrayList<Message> messages;
 
-    public Contact(String prename, String surname){
+    //Constructor with username
+    public Contact(String prename, String lastname, String username, boolean inContactList){
         this.name = prename;
-        this.surname = surname;
+        this.lastname = lastname;
+        this.username = username;
+        this.inContactList = inContactList;
+        this.messages = new ArrayList<Message>();
+    }
+
+    //Constructor withhout username
+    public Contact(String prename, String lastname, boolean inContactList){
+        this.name = prename;
+        this.lastname = lastname;
+        this.inContactList = inContactList;
         this.messages = new ArrayList<Message>();
     }
 
     public Contact(){
         this.name = "Urs ";
-        this.surname = "Schaeppi";
+        this.lastname = "Schaeppi";
         this.messages = new ArrayList<Message>();
     }
 
@@ -25,8 +36,8 @@ public class Contact {
         return name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastname() {
+        return lastname;
     }
 
     public void setInContactList(boolean contained){
@@ -43,5 +54,21 @@ public class Contact {
 
     public ArrayList<Message> getMessages(){
         return messages;
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

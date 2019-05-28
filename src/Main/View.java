@@ -3,11 +3,7 @@ package Main;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.beans.PropertyChangeListener;
 
 public class View {
 
@@ -37,7 +33,7 @@ public class View {
         chatInteractionContainer.setCenter(chats);
 
         //New Contacts Window
-        contacts = new ContactsWindow();
+        contacts = new ContactsWindow(model);
 
         //Create SplitView
         SplitPane split = new SplitPane();

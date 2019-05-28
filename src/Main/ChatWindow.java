@@ -15,6 +15,7 @@ public class ChatWindow extends ScrollPane {
     VBox message;
     Label messageText;
     View view;
+    Translator tr = ServiceLocator.getServiceLocator().getTranslator();
 
 
 //    Default Constructor
@@ -66,7 +67,7 @@ public class ChatWindow extends ScrollPane {
         Font font = new Font("Tahoma", Font.PLAIN, 12);
         int textwidth = (int)(font.getStringBounds(msg.getMessage(), frc).getWidth());
         if (textwidth >= 220){
-            ErrorPopUp errorPopUp = new ErrorPopUp("Message too long.");
+            ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.messageTooLong"), tr.getString("buttons.close"));
         } else {
             message.setPrefWidth(textwidth + 50);
             if (msg.isReceived()) {
