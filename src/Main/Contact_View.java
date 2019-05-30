@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.logging.Logger;
 
 
 public class Contact_View {
@@ -20,6 +21,7 @@ public class Contact_View {
     Button saveBtn;
     View view;
     Contact received;
+    Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
             public Contact_View(Messenger messenger, View view){
                 received = null;
@@ -69,35 +71,45 @@ public class Contact_View {
 
                 //Create new Controller
                 Contact_Controller controller = new Contact_Controller(model, this, view);
+                logger.config("Contact Controller created.");
 
 
                 /*Checks if Textfields are empty
                 * ---------------------------------*/
 
                 firstName.textProperty().addListener((observable, oldValue, newValue) -> {
+                    logger.finest("Change: FirstName");
                     if (!newValue.equals("") && !newValue.isEmpty() && (!lastName.getText().isEmpty()) &&
                             (!username.getText().isEmpty())){
                         saveBtn.setDisable(false);
+                        logger.fine("Save Button enabled.");
                     } else {
                         saveBtn.setDisable(true);
+                        logger.fine("Save Button disabled.");
                     }
 
                 });
                 lastName.textProperty().addListener((observable, oldValue, newValue) -> {
+                    logger.finest("Change: LastName");
                     if (!newValue.equals("") && !newValue.isEmpty() && (!firstName.getText().isEmpty()) &&
                             (!username.getText().isEmpty())){
                         saveBtn.setDisable(false);
+                        logger.fine("Save Button enabled.");
                     } else {
                         saveBtn.setDisable(true);
+                        logger.fine("Save Button disabled.");
                     }
 
                 });
                 username.textProperty().addListener((observable, oldValue, newValue) -> {
+                    logger.finest("Change: UserName");
                     if (!newValue.equals("") && !newValue.isEmpty() && (!lastName.getText().isEmpty()) &&
                             (!firstName.getText().isEmpty())){
                         saveBtn.setDisable(false);
+                        logger.fine("Save Button enabled.");
                     } else {
                         saveBtn.setDisable(true);
+                        logger.fine("Save Button disabled.");
                     }
 
                 });

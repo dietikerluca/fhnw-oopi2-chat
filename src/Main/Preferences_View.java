@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class Preferences_View {
@@ -22,11 +23,13 @@ public class Preferences_View {
     public ChoiceBox<String> languages;
     private ServiceLocator sl = ServiceLocator.getServiceLocator();
     private Translator tr = sl.getTranslator();
+    private Logger logger = sl.getLogger();
     public Button saveSettingsBtn, savedButton;
     public TextField ipAddressField, portField;
     public Label choiceLabel, ipAddressLbl, portLbl, header;
     public boolean buttonPressed = false;
     private HBox buttonBox;
+
 
     public Preferences_View(Messenger modelAccess){
         preferences = new Stage();
@@ -107,8 +110,10 @@ public class Preferences_View {
         portField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 2){
                 portField.getStyleClass().add("invalid");
+                logger.info("Port number longer than 2");
             } else {
                 portField.getStyleClass().remove("invalid");
+                logger.fine("Port number shorter than 2");
             }
         });
 
@@ -121,14 +126,22 @@ public class Preferences_View {
         });
 
         ipAddressField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() == 3){
+            if (newValue.length() == 3 && !newValue.endsWith(".") &&
+                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 3)))) {
                 ipAddressField.setText(ipAddressField.getText().concat("."));
-            } else if (newValue.length() == 7){
+                logger.finest("IP length: "+newValue.length());
+            } else if (newValue.length() == 7 && !newValue.endsWith(".") &&
+                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 7)))){
                 ipAddressField.setText(ipAddressField.getText().concat("."));
-            } else if (newValue.length() == 11){
+                logger.finest("IP length: "+newValue.length());
+            } else if (newValue.length() == 11 && !newValue.endsWith(".") &&
+                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 11)))){
                 ipAddressField.setText(ipAddressField.getText().concat("."));
-            } else if (newValue.length() == 11){
+                logger.finest("IP length: "+newValue.length());
+            } else if (newValue.length() == 15 && !newValue.endsWith(".") &&
+                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 15)))){
                 ipAddressField.setText(ipAddressField.getText().concat("."));
+                logger.finest("IP length: "+newValue.length());
             }
         });
 
@@ -137,11 +150,13 @@ public class Preferences_View {
             if (buttonPressed && buttonBox.getChildren().contains(savedButton)) {
                 buttonBox.getChildren().remove(savedButton);
                 buttonBox.getChildren().add(saveSettingsBtn);
+                logger.finest("New inputs made.");
             }
         });
 
         //Listener for re-editing after settings have been saved
         portField.textProperty().addListener((observable, oldValue, newValue) -> {
+            logger.finest("New inputs made.");
             if (buttonPressed && buttonBox.getChildren().contains(savedButton)) {
                 buttonBox.getChildren().remove(savedButton);
                 buttonBox.getChildren().add(saveSettingsBtn);
@@ -237,6 +252,8 @@ public class Preferences_View {
             buttonBox.getChildren().remove(saveSettingsBtn);
             buttonBox.getChildren().add(savedButton);
         } catch (Exception e){
+            logger.warning("Button not changed. \n" +
+                    "Stack Trace: "+e.getStackTrace().toString());
 
         }
     }

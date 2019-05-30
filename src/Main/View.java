@@ -50,6 +50,7 @@ public class View {
         stage.setTitle("Messenger");
         stage.setScene(scene);
         stage.setMinWidth(800);
+        stage.setMinHeight(400);
 
         String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);

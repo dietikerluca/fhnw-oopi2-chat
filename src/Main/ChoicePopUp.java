@@ -11,11 +11,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 public class ChoicePopUp {
 
     Stage popUpStage;
     Button primaryBtn, secondaryBtn;
+    ServiceLocator sl = ServiceLocator.getServiceLocator();
+    Logger logger = sl.getLogger();
 
     public ChoicePopUp(String popUpMessageString, String buttonPrimary, String buttonMessageSecondary, String window){
         popUpStage = new Stage();
@@ -35,8 +38,8 @@ public class ChoicePopUp {
             headerImage.getStyleClass().add("headerIcon");
             vbox.getChildren().add(headerImage);
         } catch (Exception e){
-            e.printStackTrace();
-
+            logger.warning("Unable to load image for Choice Pop Up \n " +
+                    "Stack Trace: "+e.getStackTrace().toString());
         }
         Label errorMessage = new Label(popUpMessageString);
         errorMessage.getStyleClass().add("errorMessage");
@@ -63,14 +66,19 @@ public class ChoicePopUp {
         popUpStage.setMaxWidth(400);
         popUpStage.setMaxHeight(250);
         popUpStage.show();
-        popUpStage.setOnCloseRequest(event -> {});
+        popUpStage.setOnCloseRequest(event -> {
+            logger.info("User tried to close window.");
+            event.consume();
+        });
 
         primaryBtn.setOnAction(event -> {
             popUpStage.close();
+            logger.finest("Userchoice: Primary Button");
         });
 
         secondaryBtn.setOnAction(event -> {
             popUpStage.close();
+            logger.finest("Userchoice: Secondary Button");
         });
 
     }

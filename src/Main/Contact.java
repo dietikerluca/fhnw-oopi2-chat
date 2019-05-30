@@ -1,6 +1,7 @@
 package Main;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class Contact {
 
@@ -8,6 +9,7 @@ public class Contact {
     private String username;
     private boolean inContactList;
     private ArrayList<Message> messages;
+    Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
     //Constructor with username
     public Contact(String prename, String lastname, String username, boolean inContactList){
@@ -16,6 +18,8 @@ public class Contact {
         this.username = username;
         this.inContactList = inContactList;
         this.messages = new ArrayList<Message>();
+        logger.fine("Contact created via fullConstructor");
+
     }
 
     //Constructor withhout username
@@ -24,12 +28,14 @@ public class Contact {
         this.lastname = lastname;
         this.inContactList = inContactList;
         this.messages = new ArrayList<Message>();
+        logger.fine("Contact created via partConstructor");
     }
 
     public Contact(){
         this.name = "Urs ";
         this.lastname = "Schaeppi";
         this.messages = new ArrayList<Message>();
+        logger.fine("Contact created via DefaultConstructor");
     }
 
     public String getPrename() {

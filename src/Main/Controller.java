@@ -3,6 +3,12 @@ package Main;
 
 import javafx.scene.input.KeyCode;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Logger;
+
 public class Controller {
 
     Messenger model;
@@ -10,7 +16,9 @@ public class Controller {
     Login_View login_view;
     Preferences_View preferencesViewView;
     Preferences_Controller prefController;
-    Translator tr = ServiceLocator.getServiceLocator().getTranslator();
+    ServiceLocator sl = ServiceLocator.getServiceLocator();
+    Translator tr = sl.getTranslator();
+    Logger logger = sl.getLogger();
 
 
     public Controller(Messenger model, View view){
@@ -19,24 +27,29 @@ public class Controller {
 
         //TestMessageGenerator
         view.mainMenu.testReceived.setOnAction(event -> {
+            logger.fine("Button: Test Message Received");
             Message msg = new Message("TestMessage Received", true);
             view.chats.displayNewMessage(msg);
         });
 
         //TestConntactGenerator
         view.mainMenu.testContact.setOnAction(event -> {
+            logger.fine("Button: Test Contact");
             Contact contact = new Contact();
             view.contacts.displayContact(contact);
         });
 
         //Show Login Window
         view.mainMenu.login.setOnAction(e -> {
+            logger.fine("Button: Login");
                 login_view = new Login_View(model);
                 login_view.start();
+
         });
 
         //Show Settings
         view.mainMenu.preferences.setOnAction(e -> {
+            logger.fine("Button: Preferences");
             preferencesViewView = new Preferences_View(model);
             prefController = new Preferences_Controller(preferencesViewView, model, view);
             preferencesViewView.start();
@@ -80,26 +93,61 @@ public class Controller {
 
         // Contact Creation
         view.mainMenu.createContact.setOnAction(event -> {
+            logger.fine("Button: Create Contact");
             System.out.println("OK");
             Contact_View cw = new Contact_View(this.model, this.view);
         });
 
         //If selected Contact changes change messages displayed
         view.contacts.contactList.getSelectionModel().selectedItemProperty().addListener(change -> {
+            logger.fine("New selected Contact: "+view.contacts.getSelectedContact().getPrename()+" "+
+                    view.contacts.getSelectedContact().getLastname());
             view.updateChatsDisplayed(view.contacts.getSelectedContact());
+        });
+
+        /*Help Menu
+        * ------------------------------------*/
+
+        view.mainMenu.reportError.setOnAction(event -> {
+            logger.finest("User tries to report error.");
+
+            ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.includeLogFiles"),
+                    tr.getString("buttons.ok"),
+                    tr.getString("buttons.close"),
+                    tr.getString("windows.includeLogFiles"));
+
+            Desktop desktop;
+            if (Desktop.isDesktopSupported()
+                    && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
+                URI mailto = null;
+                try {
+                    mailto = new URI("mailto:luca.dietiker@students.fhnw.ch?subject=Error%20Reporting");
+                } catch (URISyntaxException e) {
+                    logger.warning("Mail error: "+e.getStackTrace().toString());
+                }
+                try {
+                    desktop.mail(mailto);
+                } catch (IOException e) {
+                    logger.warning("Mail error: "+e.getStackTrace().toString());
+                }
+            } else {
+
+                logger.warning("Mail error Desktop not supported");
+            }
         });
 
 
         /*Contact Context Menu Request
         * ------------------------------------*/
         view.contacts.contactList.setOnContextMenuRequested(request -> {
+            logger.fine("Context Menu Request discovered");
             if (view.contacts.isEmpty()){
-                //nothing
+                logger.info("No Contacts in the list");
             } else {
                 Contact contact = view.contacts.getFocusedContact();
-
+                logger.fine("Selected Contact: "+contact.getPrename());
                 if (contact.getInContactList()){
-                    //nothing
+                    logger.info(contact.getPrename()+" already in contacts list.");
                 } else {
                     ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContact"),
                             tr.getString("buttons.createContact"), tr.getString("buttons.close"),

@@ -10,9 +10,9 @@ import java.io.File;
 
 public class MainMenu extends MenuBar {
 
-    Menu messenger, file, window, help;
-    MenuItem login, logout, profile, preferences, quit, newChat, newChatRoom, joinChatRoom, zoom, createContact
-            , newWindow, updates, guidance, testReceived, testContact, reportError;
+    Menu messenger, file, help;
+    MenuItem login, logout, profile, preferences, quit, newChat, newChatRoom, joinChatRoom, createContact
+            , updates, guidance, testReceived, testContact, reportError;
     ImageView chevronView, chevronView1, chevronView2, chevronView3;
 
     //Translator for Translating
@@ -49,7 +49,6 @@ public class MainMenu extends MenuBar {
 
         messenger = new Menu("", chevronView);
         file = new Menu("", chevronView1);
-        window = new Menu("", chevronView2);
         help = new Menu("", chevronView3);
 
         login = new MenuItem(t.getString("mainmenu.Login"));
@@ -69,11 +68,6 @@ public class MainMenu extends MenuBar {
 
         file.getItems().addAll(newChat, newChatRoom, joinChatRoom, createContact, testReceived, testContact);
 
-        zoom = new MenuItem("Set Zoom"); //TODO
-        newWindow = new MenuItem("New Window"); //TODO
-
-        window.getItems().addAll(zoom, newWindow);
-
         updates = new MenuItem(t.getString("mainmenu.WriteDeveloper")); //TODO
         guidance = new MenuItem(t.getString("mainmenu.Guidance")); //TODO
         reportError = new MenuItem(t.getString("mainmenu.reportError")); //TODO
@@ -84,7 +78,7 @@ public class MainMenu extends MenuBar {
         updateTexts();
 
         //adds menues to menubar
-        this.getMenus().addAll(messenger, file, window, help);
+        this.getMenus().addAll(messenger, file, help);
 
     }
 
@@ -94,7 +88,6 @@ public class MainMenu extends MenuBar {
 //        The menu entries
         messenger.setText(t.getString("mainmenu.messenger"));
         file.setText(t.getString("mainmenu.file"));
-        window.setText(t.getString("mainmenu.window"));
         help.setText(t.getString("mainmenu.help"));
 
         login.setText(t.getString("mainmenu.Login"));
@@ -105,14 +98,10 @@ public class MainMenu extends MenuBar {
         testReceived.setText("GenerateTestMessageReceived");
         testContact.setText("Generate Test Contact");
 
-
         newChat.setText(t.getString("mainmenu.newChat"));
         newChatRoom.setText(t.getString("mainmenu.newChatRoom"));
         joinChatRoom.setText(t.getString("mainmenu.joinChatRoom"));
         createContact.setText(t.getString("mainmenu.createContact"));
-
-        zoom.setText("Set Zoom"); //TODO
-        newWindow.setText("New Window"); //TODO
 
         updates.setText(t.getString("mainmenu.WriteDeveloper"));
         guidance.setText(t.getString("mainmenu.Guidance"));

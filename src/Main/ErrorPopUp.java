@@ -10,10 +10,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 public class ErrorPopUp {
 
     Stage errorStage;
+    Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
     public ErrorPopUp(String errorMessageString, String buttonMessage){
         errorStage = new Stage();
@@ -34,7 +36,7 @@ public class ErrorPopUp {
             headerImage.getStyleClass().add("headerIcon");
             vbox.getChildren().add(headerImage);
         } catch (Exception e){
-
+            logger.warning("Image could not be loaded.");
         }
         Label errorMessage = new Label(errorMessageString);
         errorMessage.getStyleClass().add("errorMessage");
@@ -57,6 +59,7 @@ public class ErrorPopUp {
         errorStage.show();
         closeBtn.setOnAction(event -> {
             errorStage.close();
+            logger.finest("User closed window.");
         });
     }
 }

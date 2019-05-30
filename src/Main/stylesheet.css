@@ -2,13 +2,13 @@
 /* Formatting message bubbles
    ----------------------------- */
 
-#MessageBoxSent {
+.MessageBubbleSent {
     -fx-background-color: #1a53ff;
     -fx-background-radius: 16;
     -fx-alignment: center;
 }
 
-#MessageBoxReceived {
+.MessageBubbleReceived {
     -fx-background-color: #C1C1C1;
     -fx-background-radius: 16;
     -fx-alignment: center;
@@ -23,10 +23,24 @@
     -fx-alignment: center-left;
     -fx-padding: 5 0 0 0;
 }
-#MessageText {
+.label.MessageBubbleText {
     -fx-text-fill: white;
     -fx-font-size: 10pt;
     -fx-font-family: "Tahoma";
+}
+
+.MessageBubbleTimeSent {
+    -fx-alignment: top-right;
+}
+
+.MessageBubbleTimeReceived {
+    -fx-alignment: top-left;
+}
+
+.label.MessageBubbleTime {
+    -fx-text-fill: #ADADAD;
+    -fx-font-family: Tahoma;
+    -fx-font-size: 10pt;
 }
 
 #ScrollPaneMessagesBubbles {
@@ -36,6 +50,10 @@
 #ScrollPaneMessagesBubbles:focused {
     -fx-padding: 5 5 5 5;
     -fx-focus-color: null;
+}
+
+.containerMessageTime {
+
 }
 
 
@@ -204,7 +222,7 @@ Single Elements only
 #TextContactCard {
     -fx-font-family: Tahoma;
     -fx-font-size: 12pt;
-    -fx-font-weight: bold;
+    /*-fx-font-weight: bold;*/
     -fx-text-fill: black;
 }
 

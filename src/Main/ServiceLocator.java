@@ -1,7 +1,7 @@
 package Main;
 
 import java.util.Locale;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class ServiceLocator {
     private static ServiceLocator serviceLocator;
@@ -36,6 +36,66 @@ public class ServiceLocator {
     }
 
     private ServiceLocator() {
+        /*Partially copied from Bradley Richards
+        * --------------------------------------------------------------------*/
+        logger = Logger.getLogger(APP_NAME);
+        logger.setLevel(Level.ALL); // set the default logger level
+
+        // By default there is one handler: the console
+        Handler[] defaultHandlers = Logger.getLogger("").getHandlers();
+        if (defaultHandlers.length == 1) {
+            // Configure the console handler
+            defaultHandlers[0].setLevel(Level.OFF); //Deactivated, because defined a new one below
+        } else {
+            throw new RuntimeException("More than one default handler found");
+        }
+
+        /*Handler for differentiation between sever and not severe logs
+        * not severe: std out
+        * sever: std err
+        * ------------------------------------------------------------------*/
+        Handler consoleHandler = new Handler(){
+            @Override
+            public void publish(LogRecord record)
+            {
+                if (getFormatter() == null)
+                {
+                    setFormatter(new SimpleFormatter());
+                }
+
+                try {
+                    String message = getFormatter().format(record);
+                    if (record.getLevel().intValue() >= Level.WARNING.intValue())
+                    {
+                        System.err.write(message.getBytes());
+                    }
+                    else
+                    {
+                        System.out.write(message.getBytes());
+                    }
+                } catch (Exception exception) {
+                    reportError(null, exception, ErrorManager.FORMAT_FAILURE);
+                }
+
+            }
+
+            @Override
+            public void close() throws SecurityException {}
+            @Override
+            public void flush(){}
+        };
+        logger.addHandler(consoleHandler);
+
+        // Add a file handler: put rotating files in the tmp directory
+        try {
+            // %u is for file-conflicts; this happens if multiple instances
+            // of the program are running. %g is the rotating logfile number
+            Handler logHandler = new FileHandler("%h/Desktop/" + APP_NAME + "_%u" + "_%g" + ".log", 1000000, 9);
+            logHandler.setLevel(Level.ALL);
+            logger.addHandler(logHandler);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to initialize log files: " + e.toString());
+        }
     }
 
     public Class<?> getAPP_CLASS() {
@@ -75,6 +135,7 @@ public class ServiceLocator {
 
     public void setTranslator(Translator translator) {
         this.translator = translator;
+        logger.config("Translator Set to "+translator.getCurrentLocale().getLanguage());
     }
 
 

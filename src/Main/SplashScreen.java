@@ -19,12 +19,14 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class SplashScreen extends VBox {
 
     ImageView headerImage;
     private Stage splashStage;
     private Initializer initializer;
+    private Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
     public SplashScreen(){
 
@@ -33,6 +35,7 @@ public class SplashScreen extends VBox {
         splashStage.setScene(scene);
         splashStage.setAlwaysOnTop(true);
         splashStage.initStyle(StageStyle.UNDECORATED);
+        logger.finest("StageCreated");
 
         /*Load Image
          * ----------------------------------------*/
@@ -47,6 +50,7 @@ public class SplashScreen extends VBox {
             headerImage.setFitWidth(500);
             headerImage.getStyleClass().add("headerIcon");
             this.getChildren().add(headerImage);
+            logger.finest("Image loaded");
         } catch (Exception e){
 
         }
@@ -63,6 +67,7 @@ public class SplashScreen extends VBox {
         dot4.setFill(Color.LIGHTGREY);
         Group group = new Group();
         group.getChildren().addAll(dot1, dot2, dot3, dot4);
+        logger.finest("Dots created");
 
 
         /*Animation Setup
@@ -77,19 +82,23 @@ public class SplashScreen extends VBox {
 
         SequentialTransition seq = new SequentialTransition(fillDot1, fillDot2, fillDot3, fillDot4);
         seq.play();
+        logger.finest("Animation started");
 
         this.getChildren().add(group);
         this.setSpacing(20);
         this.setAlignment(Pos.TOP_CENTER);
 
         splashStage.show();
+        logger.finest("StageLive");
 
         //Buffer with Thread for chaging scene
         Buffer buffer = new Buffer();
         Thread t = new Thread(buffer);
         t.start();
+        logger.finest("Buffer Started");
 
         initializer = new Initializer();
+        logger.finest("Initialization begun");
 
     }
 
@@ -116,6 +125,7 @@ public class SplashScreen extends VBox {
 
         Scene openScene = new Scene(vBox, 500, 350);
         splashStage.setScene(openScene);
+        logger.finest("Initialization completed.");
 
         String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
         openScene.getStylesheets().add(stylesheet);
@@ -124,6 +134,8 @@ public class SplashScreen extends VBox {
         //Listeners for choice made
         login.setOnAction(click -> {
             initializer.ready(true);
+            logger.info("Userchoice: |Login|");
+            logger.config("Userchoice: |Login|");
             splashStage.hide();
         });
 

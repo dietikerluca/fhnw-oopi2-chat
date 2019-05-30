@@ -32,7 +32,7 @@ public class Translator {
         Locale.setDefault(locale); // Change VM default (for dialogs, etc.)
         currentLocale = locale;
 
-//        logger.info("Loaded resources for " + locale.getLanguage());
+        logger.info("Loaded resources for " + locale.getLanguage());
     }
 
     public Locale getCurrentLocale() {

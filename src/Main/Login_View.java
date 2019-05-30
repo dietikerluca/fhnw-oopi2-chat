@@ -23,6 +23,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class Login_View {
 
@@ -36,8 +37,10 @@ public class Login_View {
     public Label usernameLabel, pwLabel;
     private ServiceLocator sl = ServiceLocator.getServiceLocator();
     private Translator tr = sl.getTranslator();
+    private Logger logger = sl.getLogger();
     private Image errorRobo, server;
     private ImageView headerImage, serverImage;
+    private String url;
 
 
     public Login_View(Messenger model){
@@ -48,7 +51,7 @@ public class Login_View {
         /*Load Image
          * ----------------------------------------*/
         try {
-            String url = System.getProperty("user.dir");
+            url = System.getProperty("user.dir");
             url += "/src/Image/login_robo.png";
             File image = new File(url);
             url = image.toURI().toURL().toString();
@@ -58,9 +61,10 @@ public class Login_View {
             headerImage.setFitWidth(70);
             headerImage.getStyleClass().add("headerIcon");
             vbox.getChildren().add(headerImage);
+            logger.fine("Image loaded.");
         } catch (Exception e){
             e.printStackTrace();
-
+            logger.warning("Image could not be loaded. \n Stack Trace: "+e.getStackTrace().toString());
         }
 
         //Create Fields
@@ -95,7 +99,8 @@ public class Login_View {
         scene.getStylesheets().add(stylesheet);
 
         confirmButton.setOnAction(event -> {
-            loginSequence();
+            logger.fine("Button: Confirm");
+            loginSequence(); //TODO
         });
     }
 
@@ -114,7 +119,6 @@ public class Login_View {
         /*Load Server Image
          * ----------------------------------------*/
         try {
-            String url = System.getProperty("user.dir");
             url += "/src/Image/server.png";
             File image = new File(url);
             url = image.toURI().toURL().toString();
@@ -125,7 +129,7 @@ public class Login_View {
             serverImage.getStyleClass().add("headerIcon");
             vbox.getChildren().add(serverImage);
         } catch (Exception e){
-
+            logger.warning("Image could not be loaded. \n Stack Trace: "+e.getStackTrace().toString());
         }
 
         /*Create Animation Dots
@@ -189,7 +193,7 @@ public class Login_View {
             successImage.getStyleClass().add("headerIcon");
             vboxSuccess.getChildren().add(successImage);
         } catch (Exception e){
-
+            logger.warning("Image could not be loaded. \n Stack Trace: "+e.getStackTrace().toString());
         }
 
         Label sucessLabel = new Label(tr.getString("labels.loginSuccessfull"));
