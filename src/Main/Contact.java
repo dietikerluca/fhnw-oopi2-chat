@@ -7,9 +7,10 @@ public class Contact {
 
     private String name, lastname, nickname;
     private String username;
-    private boolean inContactList;
+    private boolean inContactList, blocked;
     private ArrayList<Message> messages;
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
+
 
     //Constructor with username
     public Contact(String prename, String lastname, String username, boolean inContactList){
@@ -18,16 +19,18 @@ public class Contact {
         this.username = username;
         this.inContactList = inContactList;
         this.messages = new ArrayList<Message>();
+        this.blocked = false;
         logger.fine("Contact created via fullConstructor");
 
     }
 
-    //Constructor withhout username
+    //Constructor without username
     public Contact(String prename, String lastname, boolean inContactList){
         this.name = prename;
         this.lastname = lastname;
         this.inContactList = inContactList;
         this.messages = new ArrayList<Message>();
+        this.blocked = false;
         logger.fine("Contact created via partConstructor");
     }
 
@@ -35,6 +38,7 @@ public class Contact {
         this.name = "Urs ";
         this.lastname = "Schaeppi";
         this.messages = new ArrayList<Message>();
+        this.blocked = false;
         logger.fine("Contact created via DefaultConstructor");
     }
 
@@ -77,4 +81,14 @@ public class Contact {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public boolean setBlocked(boolean blocked){
+        return this.blocked = blocked;
+    }
+
+
 }

@@ -136,6 +136,79 @@
     -fx-graphic-text-gap: 8;
 }
 
+.button.block {
+    -fx-background-color: #CFD5D9;
+    -fx-text-fill: #474747;
+    -fx-border-color: #CFD5D9;
+    -fx-graphic-text-gap: 8;
+}
+
+.button.block:hover {
+    -fx-background-color: #BE0000;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #BE0000;
+    -fx-graphic-text-gap: 8;
+}
+
+.button.unblock {
+    -fx-background-color: #BE0000;
+    -fx-text-fill: #474747;
+    -fx-border-color: #BE0000;
+    -fx-graphic-text-gap: 8;
+}
+
+.button.unblock:hover {
+    -fx-background-color: #CFD5D9;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #CFD5D9;
+    -fx-graphic-text-gap: 8;
+}
+
+/*Toggle Button for blocking contacts
+----------------------------------------*/
+.toggle-button.block {
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-pref-height: 40;
+    -fx-min-width: 120;
+    -fx-font-size: 12pt;
+    -fx-graphic-text-gap: 8;
+    -fx-background-color: #CFD5D9;
+    -fx-text-fill: #FFFFFF;
+}
+.toggle-button.block:hover {
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-pref-height: 40;
+    -fx-min-width: 120;
+    -fx-font-size: 12pt;
+    -fx-graphic-text-gap: 8;
+    -fx-background-color: #BE0000;
+    -fx-text-fill: #FFFFFF;
+}
+
+.toggle-button.block:selected {
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-pref-height: 40;
+    -fx-min-width: 120;
+    -fx-font-size: 12pt;
+    -fx-graphic-text-gap: 8;
+    -fx-background-color: #DD1122;
+    -fx-text-fill: #FFFFFF;
+}
+.toggle-button.block:selected:hover {
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-pref-height: 40;
+    -fx-min-width: 120;
+    -fx-font-size: 12pt;
+    -fx-graphic-text-gap: 8;
+    -fx-background-color: #B1B9BE;
+    -fx-text-fill: #FFFFFF;
+}
+
+
 
 /*General TextFields
 -----------------------*/
@@ -219,18 +292,29 @@ Single Elements only
     -fx-spacing: 25;
 }
 
-#TextContactCard {
+.label.TextContactCard {
     -fx-font-family: Tahoma;
     -fx-font-size: 12pt;
-    /*-fx-font-weight: bold;*/
+    -fx-font-weight: bold;
     -fx-text-fill: black;
 }
 
-#TextContactCardSecond {
+.label.TextContactCardSecond {
     -fx-text-fill: #3C3C3C;
 }
 
-#ContactCardTextContainer {
+.label.TextContactCardBlocked {
+    -fx-font-family: Tahoma;
+    -fx-font-size: 12pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ADADAD;
+}
+
+.label.TextContactCardSecondBlocked {
+    -fx-text-fill: #ADADAD;
+}
+
+.ContactCardTextContainer {
     -fx-spacing: 3;
 }
 
@@ -333,7 +417,6 @@ Single Elements only
 
 .menu:hover {
     -fx-background-color: #FFFFFF;
-
 }
 
 .menu:showing {
@@ -364,10 +447,14 @@ Single Elements only
 
 .menu-item:hover {
     -fx-background-color:  #E4E9EC;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
 }
 
 .menu-item:focused {
     -fx-background-color:  #E4E9EC;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
 }
 
 .menu-item:hover .label {
@@ -381,8 +468,8 @@ Single Elements only
     -fx-font-family: Tahoma;
     -fx-background-color:  #E4E9EC;
     -fx-text-fill:  #001155;
-    -fx-background-radius: 5;
-    -fx-border-radius: 5;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
 }
 
 .menu-item .label {

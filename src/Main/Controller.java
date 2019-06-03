@@ -100,9 +100,13 @@ public class Controller {
 
         //If selected Contact changes change messages displayed
         view.contacts.contactList.getSelectionModel().selectedItemProperty().addListener(change -> {
-            logger.fine("New selected Contact: "+view.contacts.getSelectedContact().getPrename()+" "+
-                    view.contacts.getSelectedContact().getLastname());
-            view.updateChatsDisplayed(view.contacts.getSelectedContact());
+            try {
+                logger.fine("New selected Contact: " + view.contacts.getSelectedContact().getPrename() + " " +
+                        view.contacts.getSelectedContact().getLastname());
+                view.updateChatsDisplayed(view.contacts.getSelectedContact());
+            } catch (Exception e){
+                logger.warning("No Contact found.");
+            }
         });
 
         /*Help Menu
@@ -146,22 +150,37 @@ public class Controller {
             } else {
                 Contact contact = view.contacts.getFocusedContact();
                 logger.fine("Selected Contact: "+contact.getPrename());
-                if (contact.getInContactList()){
-                    logger.info(contact.getPrename()+" already in contacts list.");
-                } else {
+                if (!contact.getInContactList()){
+                    logger.info(contact.getPrename()+" not in contact list.");
                     ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContact"),
-                            tr.getString("buttons.createContact"), tr.getString("buttons.close"),
+                            tr.getString("buttons.createContact"),
+                            tr.getString("buttons.close"),
                             tr.getString("windows.newContactChoice"));
 
                     choicePopUp.primaryBtn.setOnAction(action -> {
                         choicePopUp.stop();
                         Contact_View contactsWindow = new Contact_View(model, view, contact);
-                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow,view);
+                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
                     });
-                }
+
+                } else {
+                    logger.info(contact.getPrename()+" exists in contact list already.");
+                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContactExisting"),
+                            tr.getString("buttons.edit"),
+                            tr.getString("buttons.close"),
+                            tr.getString("windows.editContact"));
+
+                    choicePopUp.primaryBtn.setOnAction(action -> {
+                        choicePopUp.stop();
+                        Contact_View contactsWindow = new Contact_View(model, view, contact);
+                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
+                    });
+
+
 
             }
 
+        }
         });
 
 

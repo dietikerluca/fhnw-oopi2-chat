@@ -119,6 +119,7 @@ public class Login_View {
         /*Load Server Image
          * ----------------------------------------*/
         try {
+            url = System.getProperty("user.dir");
             url += "/src/Image/server.png";
             File image = new File(url);
             url = image.toURI().toURL().toString();

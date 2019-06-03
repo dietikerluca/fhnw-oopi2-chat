@@ -20,6 +20,10 @@ public class Messenger {
         this.contactList.add(contact);
     }
 
+    public ArrayList<Contact> getContactList(){
+        return this.contactList;
+    }
+
 
 
 

@@ -4,10 +4,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 
@@ -19,8 +23,11 @@ public class Contact_View {
     Messenger model;
     TextField firstName, lastName, username;
     Button saveBtn;
+    ToggleButton blocked;
+    ImageView blockedIconWhite;
     View view;
     Contact received;
+    HBox buttons;
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
             public Contact_View(Messenger messenger, View view){
@@ -54,6 +61,9 @@ public class Contact_View {
                 HBox spacer = new HBox();
                 spacer.setMinHeight(30);
                 verticalBox.getChildren().addAll(labelBox, nameBox, userNameBox, spacer, saveBtn);
+
+                //Block Button
+                //TODO Block Button here too?
 
                 //Show stage
                 Scene scene = new Scene(verticalBox, 400, 350);
@@ -146,13 +156,41 @@ public class Contact_View {
         saveBtn.setDisable(true);
         saveBtn.getStyleClass().add("confirm");
         HBox spacer = new HBox();
+        buttons = new HBox();
+        buttons.setSpacing(20);
         spacer.setMinHeight(30);
-        verticalBox.getChildren().addAll(labelBox, nameBox, userNameBox, spacer, saveBtn);
+        verticalBox.getChildren().addAll(labelBox, nameBox, userNameBox, spacer, buttons);
 
         //Add Contact details already delivered
         firstName.setText(contact.getPrename());
         lastName.setText(contact.getLastname());
         username.setText(contact.getUsername());
+
+        //Block Button
+        /*Load Image
+         * ----------------------------------------*/
+        try {
+            String url = System.getProperty("user.dir");
+            url += "/src/Image/block_white.png";
+            File image = new File(url);
+            url = image.toURI().toURL().toString();
+            Image errorRobo = new Image(url);
+            blockedIconWhite = new ImageView(errorRobo);
+            blockedIconWhite.setFitHeight(20);
+            blockedIconWhite.setFitWidth(20);
+        } catch (Exception e){
+            logger.warning("Image could not be loaded.");
+        }
+        blocked = new ToggleButton( "--", blockedIconWhite);
+        blocked.getStyleClass().add("block");
+        if (contact.isBlocked()) {
+            blocked.setSelected(true);
+            blocked.setText(tr.getString("buttons.unblocked"));
+        } else {
+            blocked.setSelected(false);
+            blocked.setText(tr.getString("buttons.blocked"));
+        }
+        buttons.getChildren().addAll(blocked, saveBtn);
 
         //Show stage
         Scene scene = new Scene(verticalBox, 400, 350);
@@ -203,6 +241,35 @@ public class Contact_View {
 
         });
 
+        blocked.setOnAction(event -> {
+            if ((!lastName.getText().isEmpty())
+                    && (!firstName.getText().isEmpty())
+                    && (!username.getText().isEmpty())){
+                    saveBtn.setDisable(false);
+            } else {
+                saveBtn.setDisable(true);
+            }
+
+        });
+
+        /*Checks for Button hovers (Toggle Block Button
+        * ---------------------------------------------*/
+        blocked.setOnMouseEntered(event -> {
+            if (blocked.isSelected()){
+                blocked.setText(tr.getString("buttons.unblock"));
+            } else {
+                blocked.setText(tr.getString("buttons.block"));
+            }
+        });
+
+        blocked.setOnMouseExited(event -> {
+            if (blocked.isSelected()){
+                blocked.setText(tr.getString("buttons.blocked"));
+            } else {
+                blocked.setText(tr.getString("buttons.unblocked"));
+            }
+        });
+
 
     }
 
@@ -213,6 +280,7 @@ public class Contact_View {
             public Contact getExisting(){
                 return this.received;
             }
+
 
 
 }
