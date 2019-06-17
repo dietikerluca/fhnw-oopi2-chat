@@ -2,12 +2,12 @@ package Main;
 
 import java.util.ArrayList;
 
-public class Messenger {
+public class Main_Model {
     ServiceLocator sl;
     Translator tr;
     ArrayList<Contact> contactList;
 
-    public Messenger(){
+    public Main_Model(){
         this.sl = ServiceLocator.getServiceLocator();
         this.tr = sl.getTranslator();
 

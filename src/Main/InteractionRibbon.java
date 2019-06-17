@@ -10,11 +10,11 @@ public class InteractionRibbon extends HBox {
 
     public TextField messageField;
     public Button sendBtn;
-    private Messenger model;
+    private Main_Model model;
     private ServiceLocator sl = ServiceLocator.getServiceLocator();
     private Translator tr = sl.getTranslator();
 
-    public InteractionRibbon(Messenger model){
+    public InteractionRibbon(Main_Model model){
         this.model = model;
         this.setId("InteractionRibbonBox");
 

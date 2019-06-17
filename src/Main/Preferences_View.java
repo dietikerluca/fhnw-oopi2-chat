@@ -1,5 +1,6 @@
 package Main;
 
+import Abstract_Classes.View;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,35 +15,49 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
-public class Preferences_View {
+public class Preferences_View extends View {
 
-    public Stage preferences;
-    public Messenger model;
+    private ServiceLocator sl;
+    private Translator tr;
+    private Logger logger;
+
+    public Main_Model model;
     public ChoiceBox<String> languages;
-    private ServiceLocator sl = ServiceLocator.getServiceLocator();
-    private Translator tr = sl.getTranslator();
-    private Logger logger = sl.getLogger();
+
     public Button saveSettingsBtn, savedButton;
     public TextField ipAddressField, portField;
     public Label choiceLabel, ipAddressLbl, portLbl, header;
     public boolean buttonPressed = false;
-    private HBox buttonBox;
+    public HBox buttonBox;
+
+    public Preferences_View(Stage primaryStage, Preferences_Model model){
+        super(primaryStage, model);
+
+        stage.setAlwaysOnTop(true);
+        stage.setMinHeight(450);
+        stage.setMinWidth(450);
+        stage.setTitle(tr.getString("windows.settings"));
+
+        ServiceLocator.getServiceLocator().getLogger().info("Settings initialized.");
+    }
 
 
-    public Preferences_View(Messenger modelAccess){
-        preferences = new Stage();
-        this.model = modelAccess;
-        VBox vbox = new VBox();
-        vbox.getStyleClass().add("windowPopUp");
+    public Scene create_GUI(){
+        sl = ServiceLocator.getServiceLocator();
+        tr = sl.getTranslator();
+        logger = sl.getLogger();
+
+        //Create Root Node
+        VBox root = new VBox();
+        root.getStyleClass().add("windowPopUp");
 
         //Create Fields
         header = new Label(tr.getString("header.settings"));
         header.getStyleClass().add("header");
         languages = new ChoiceBox<String>();
         choiceLabel = new Label(tr.getString("preferences.languagesLbl"));
-        languages.getItems().addAll("English","Deutsch");
+        languages.getItems().addAll("English","Deutsch"); //TODO von SL holen
         languages.getSelectionModel().select(sl.getTranslator().getCurrentLocale().getDisplayLanguage());
 
         //Boxes for iP Address and Port Number
@@ -62,7 +77,7 @@ public class Preferences_View {
         portField = new TextField(tr.getString("preferences.portField"));
         portField.setMaxWidth(40);
 
-        //Set Promt Texts
+        //Set Prompt Texts
         ipAddressField.setPromptText(sl.getIpAddressPreset());
         portField.setPromptText(String.valueOf(sl.getPort()));
 
@@ -94,150 +109,35 @@ public class Preferences_View {
         spacer.setMinHeight(30);
 
         //Add fields and Button to VBox
-        vbox.getChildren().addAll(header, languagesBox, ipBox, portBox, spacer, buttonBox);
-        vbox.setSpacing(10);
+        root.getChildren().addAll(header, languagesBox, ipBox, portBox, spacer, buttonBox);
+        root.setSpacing(10);
 
         //Create Scene
-        Scene scene = new Scene(vbox, 450, 450);
+        Scene scene = new Scene(root, 450, 450);
         String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
-        preferences.setMinHeight(450);
-        preferences.setMinWidth(450);
-        preferences.setTitle(tr.getString("windows.settings"));
-        preferences.setScene(scene);
 
-        //Listeners for incorrect value entries
-        portField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 2){
-                portField.getStyleClass().add("invalid");
-                logger.info("Port number longer than 2");
-            } else {
-                portField.getStyleClass().remove("invalid");
-                logger.fine("Port number shorter than 2");
-            }
-        });
-
-        ipAddressField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (buttonPressed){
-                if (validateIpAddress(newValue)) {
-                    ipAddressField.getStyleClass().remove("invalid");
-                }
-            }
-        });
-
-        ipAddressField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() == 3 && !newValue.endsWith(".") &&
-                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 3)))) {
-                ipAddressField.setText(ipAddressField.getText().concat("."));
-                logger.finest("IP length: "+newValue.length());
-            } else if (newValue.length() == 7 && !newValue.endsWith(".") &&
-                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 7)))){
-                ipAddressField.setText(ipAddressField.getText().concat("."));
-                logger.finest("IP length: "+newValue.length());
-            } else if (newValue.length() == 11 && !newValue.endsWith(".") &&
-                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 11)))){
-                ipAddressField.setText(ipAddressField.getText().concat("."));
-                logger.finest("IP length: "+newValue.length());
-            } else if (newValue.length() == 15 && !newValue.endsWith(".") &&
-                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 15)))){
-                ipAddressField.setText(ipAddressField.getText().concat("."));
-                logger.finest("IP length: "+newValue.length());
-            }
-        });
-
-        //Listener for re-editing after settings have been saved
-        ipAddressField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (buttonPressed && buttonBox.getChildren().contains(savedButton)) {
-                buttonBox.getChildren().remove(savedButton);
-                buttonBox.getChildren().add(saveSettingsBtn);
-                logger.finest("New inputs made.");
-            }
-        });
-
-        //Listener for re-editing after settings have been saved
-        portField.textProperty().addListener((observable, oldValue, newValue) -> {
-            logger.finest("New inputs made.");
-            if (buttonPressed && buttonBox.getChildren().contains(savedButton)) {
-                buttonBox.getChildren().remove(savedButton);
-                buttonBox.getChildren().add(saveSettingsBtn);
-            }
-        });
-
-        //Register for closing events
-        preferences.setOnCloseRequest(event -> {
-            if (ipAddressField.getText().equals("") == false){
-                ChoicePopUp choicePopup = new ChoicePopUp(tr.getString("ErrorMessages.closeRequest"),
-                        tr.getString("buttons.back"), tr.getString("buttons.closeAnyway"),
-                        tr.getString("windows.closeRequest"));
-                event.consume();
-                choicePopup.secondaryBtn.setOnAction(click -> {
-                    this.stop();
-                    choicePopup.popUpStage.hide();
-                });
-            }
-        });
-
+        return scene;
     }
 
-    public void start(){
-        preferences.show();
-    }
-
-    public void stop() {
-        preferences.hide();
-    }
 
     protected void updateTexts() {
-//        The menu entries
-        this.tr = ServiceLocator.getServiceLocator().getTranslator();
-        header.setText(tr.getString("header.settings"));
-        choiceLabel.setText(tr.getString("preferences.languagesLbl"));
-        saveSettingsBtn.setText(tr.getString("preferences.saveBtn"));
-        ipAddressLbl.setText(tr.getString("preferences.ipAddressLbl"));
-        portLbl.setText(tr.getString("preferences.portLbl"));
-    }
-
-    /* Partly Copied from Bradley Richards
-     * -----------------------------------------------------------------------------------*/
-    public static boolean validateIpAddress(String ipAddress) {
-        boolean formatOK = true;
-        boolean numbersOnly = true;
-        String ipPieces[] = ipAddress.split("\\.");
-        for (String piece : ipPieces) {
-            if (Pattern.matches("[a-zA-Z]+", piece)) {
-                numbersOnly = false;
-            }
-        }
-         if (numbersOnly) {
-            if (ipPieces.length != 4) {
-                formatOK = false;
-            } else {
-                // Each part must be an integer 0 to 255
-                int byteValue = -1;
-                for (String s : ipPieces) {
-                    byteValue = Integer.parseInt(s); // may throw
-                    // NumberFormatException
-                    if (byteValue < 0 | byteValue > 255) formatOK = false;
-                }
-            }
-        }
-        return (formatOK && numbersOnly);
-    }
-
-    public static boolean validatePortNumber(String portText) {
-        boolean formatOK = false;
         try {
-            int portNumber = Integer.parseInt(portText);
-            if (portNumber >= 0 & portNumber <= 65535) {
-                formatOK = true;
-            }
-        } catch (NumberFormatException e) {
+            this.tr = ServiceLocator.getServiceLocator().getTranslator();
+            header.setText(tr.getString("header.settings"));
+            choiceLabel.setText(tr.getString("preferences.languagesLbl"));
+            saveSettingsBtn.setText(tr.getString("preferences.saveBtn"));
+            ipAddressLbl.setText(tr.getString("preferences.ipAddressLbl"));
+            portLbl.setText(tr.getString("preferences.portLbl"));
+            logger.fine("Texts updated.");
+        } catch (Exception e) {
+            logger.warning("Problem with updating Texts. "+e.getStackTrace().toString());
         }
-        return formatOK;
     }
+
+
 
     public void changeButton(){
-
         try {
             String url = System.getProperty("user.dir");
             url += "/src/Image/done_circle.png";
@@ -251,6 +151,7 @@ public class Preferences_View {
             savedButton.getStyleClass().add("success");
             buttonBox.getChildren().remove(saveSettingsBtn);
             buttonBox.getChildren().add(savedButton);
+            logger.fine("Button changed.");
         } catch (Exception e){
             logger.warning("Button not changed. \n" +
                     "Stack Trace: "+e.getStackTrace().toString());

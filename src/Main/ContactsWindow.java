@@ -9,12 +9,12 @@ import java.util.logging.Logger;
 
 public class ContactsWindow extends ScrollPane {
     ListView contactList;
-    Messenger model;
+    Main_Model model;
     ServiceLocator sl = ServiceLocator.getServiceLocator();
     Logger logger = sl.getLogger();
 
-    public ContactsWindow( Messenger messenger){
-        this.model = messenger;
+    public ContactsWindow( Main_Model mainModel){
+        this.model = mainModel;
         contactList = new ListView<ContactCard>();
         contactList.prefWidthProperty().bind(this.widthProperty());
         contactList.prefHeightProperty().bind(this.heightProperty());

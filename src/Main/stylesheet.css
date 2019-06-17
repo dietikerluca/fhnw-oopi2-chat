@@ -479,4 +479,10 @@ Single Elements only
 
 
 
+/*Splash Screen
+---------------------------------*/
+.splashBox {
+    -fx-background-color: #F4F4F4;
+}
+
 

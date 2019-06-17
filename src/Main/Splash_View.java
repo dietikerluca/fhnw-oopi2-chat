@@ -1,8 +1,9 @@
 package Main;
 
+import Abstract_Classes.Model;
+import Abstract_Classes.View;
 import javafx.animation.FillTransition;
 import javafx.animation.SequentialTransition;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,24 +19,27 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
-public class SplashScreen extends VBox {
+public class Splash_View extends View {
 
-    ImageView headerImage;
-    private Stage splashStage;
-    private Initializer initializer;
-    private Logger logger = ServiceLocator.getServiceLocator().getLogger();
+    private ImageView headerImage;
+    private ServiceLocator sl;
+    private String stylesheet;
+    public Button login, createAccount;
 
-    public SplashScreen(){
+    public Splash_View(Stage primaryStage, Model model){
+        super(primaryStage, model);
+        stage.setAlwaysOnTop(true);
+        stage.initStyle(StageStyle.UNDECORATED);
+    }
 
-        splashStage = new Stage();
-        Scene scene = new Scene(this, 500, 350);
-        splashStage.setScene(scene);
-        splashStage.setAlwaysOnTop(true);
-        splashStage.initStyle(StageStyle.UNDECORATED);
-        logger.finest("StageCreated");
+    @Override
+    protected Scene create_GUI() {
+        sl = ServiceLocator.getServiceLocator();
+
+        VBox root = new VBox();
+        root.getStyleClass().add("splashBox");
+        Scene scene = new Scene(root, 500, 350);
 
         /*Load Image
          * ----------------------------------------*/
@@ -49,8 +53,7 @@ public class SplashScreen extends VBox {
             headerImage.setFitHeight(250);
             headerImage.setFitWidth(500);
             headerImage.getStyleClass().add("headerIcon");
-            this.getChildren().add(headerImage);
-            logger.finest("Image loaded");
+            root.getChildren().add(headerImage);
         } catch (Exception e){
 
         }
@@ -67,7 +70,6 @@ public class SplashScreen extends VBox {
         dot4.setFill(Color.LIGHTGREY);
         Group group = new Group();
         group.getChildren().addAll(dot1, dot2, dot3, dot4);
-        logger.finest("Dots created");
 
 
         /*Animation Setup
@@ -82,35 +84,31 @@ public class SplashScreen extends VBox {
 
         SequentialTransition seq = new SequentialTransition(fillDot1, fillDot2, fillDot3, fillDot4);
         seq.play();
-        logger.finest("Animation started");
 
-        this.getChildren().add(group);
-        this.setSpacing(20);
-        this.setAlignment(Pos.TOP_CENTER);
+        stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+        scene.getStylesheets().add(stylesheet);
 
-        splashStage.show();
-        logger.finest("StageLive");
+        root.getChildren().add(group);
+        root.setSpacing(20);
+        root.setAlignment(Pos.TOP_CENTER);
 
-        //Buffer with Thread for chaging scene
-        Buffer buffer = new Buffer();
-        Thread t = new Thread(buffer);
-        t.start();
-        logger.finest("Buffer Started");
-
-        initializer = new Initializer();
-        logger.finest("Initialization begun");
-
-    }
-
-    private void showLoginOptions(){
-
-        VBox vBox = new VBox();
-
+        /*Preparation for Login Buttons Main_View
+        * -------------------------------------------------*/
         //Create Fields and Buttons for Login
-        Button login = new Button("Login");
-        Button createAccount = new Button("Create Account");
+        login = new Button("Login");
+        createAccount = new Button("Create Account");
         login.getStyleClass().add("primary");
         createAccount.getStyleClass().add("secondary");
+
+        return scene;
+    }
+
+    /*Creates Scene with Login Options
+    * ----------------------------------------------------------------*/
+    public Scene createLoginOption_GUI(){
+        /*Preparation for Loaded LoginScreen TODO Problems in here
+         * --------------------------------------------------*/
+        VBox vBox = new VBox();
 
         //HBox for Buttons
         HBox hbox = new HBox();
@@ -124,37 +122,10 @@ public class SplashScreen extends VBox {
         vBox.setAlignment(Pos.TOP_CENTER);
 
         Scene openScene = new Scene(vBox, 500, 350);
-        splashStage.setScene(openScene);
-        logger.finest("Initialization completed.");
-
-        String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
         openScene.getStylesheets().add(stylesheet);
+        //------------------------------------------------------
 
-
-        //Listeners for choice made
-        login.setOnAction(click -> {
-            initializer.ready(true);
-            logger.info("Userchoice: |Login|");
-            logger.config("Userchoice: |Login|");
-            splashStage.hide();
-        });
-
-
-    }
-
-    private class Buffer implements Runnable {
-
-        @Override
-        public void run() {
-            try {
-                TimeUnit.SECONDS.sleep(5);
-                Platform.runLater(() -> {
-                    showLoginOptions();
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        return openScene;
     }
 
 

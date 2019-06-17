@@ -2,6 +2,7 @@ package Main;
 
 
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
@@ -9,19 +10,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
-public class Controller {
+public class Main_Controller {
 
-    Messenger model;
-    View view;
+    Main_Model model;
+    Main_View view;
     Login_View login_view;
-    Preferences_View preferencesViewView;
+
+    Preferences_Model preferences_model;
+    Preferences_View preferences_view;
     Preferences_Controller prefController;
+
     ServiceLocator sl = ServiceLocator.getServiceLocator();
     Translator tr = sl.getTranslator();
     Logger logger = sl.getLogger();
 
 
-    public Controller(Messenger model, View view){
+    public Main_Controller(Main_Model model, Main_View view){
         this.model = model;
         this.view = view;
 
@@ -42,7 +46,10 @@ public class Controller {
         //Show Login Window
         view.mainMenu.login.setOnAction(e -> {
             logger.fine("Button: Login");
-                login_view = new Login_View(model);
+            Stage loginStage = new Stage();
+            Login_Model login_model = new Login_Model();
+            login_view = new Login_View(loginStage, login_model);
+            Login_Controller login_controller = new Login_Controller(login_model, login_view);
                 login_view.start();
 
         });
@@ -50,10 +57,14 @@ public class Controller {
         //Show Settings
         view.mainMenu.preferences.setOnAction(e -> {
             logger.fine("Button: Preferences");
-            preferencesViewView = new Preferences_View(model);
-            prefController = new Preferences_Controller(preferencesViewView, model, view);
-            preferencesViewView.start();
+            preferences_model = new Preferences_Model();
+
+            Stage prefStage = new Stage();
+            preferences_view = new Preferences_View(prefStage, preferences_model);
+            prefController = new Preferences_Controller(preferences_view, preferences_model, view);
+            preferences_view.start();
         });
+
 
         //New Message Entered and Sent
         view.interactionRibbon.sendBtn.setOnAction(event -> {

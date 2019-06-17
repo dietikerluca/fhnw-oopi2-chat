@@ -4,18 +4,18 @@ import java.util.logging.Logger;
 
 public class Contact_Controller {
 
-    Messenger model;
+    Main_Model model;
     Contact_View contactView;
-    View view;
+    Main_View view;
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
-    public Contact_Controller(Messenger messenger, Contact_View contact_view, View view){
-        this.model = messenger;
+    public Contact_Controller(Main_Model mainModel, Contact_View contact_view, Main_View view){
+        this.model = mainModel;
         this.contactView = contact_view;
         this.view = view;
 
 
-       //Listens for Button Clicks in Contact View
+       //Listens for Button Clicks in Contact Main_View
         contactView.saveBtn.setOnAction(event -> {
             logger.fine("Button 'Save' clicked");
             if(contact_view.getExisting() == null) {

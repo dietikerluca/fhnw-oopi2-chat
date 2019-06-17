@@ -1,10 +1,10 @@
 package Main;
 
+import Abstract_Classes.View;
 import javafx.animation.Animation;
 import javafx.animation.FillTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,41 +19,64 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class Login_View {
+public class Login_View extends View {
 
-    public Stage loginStage;
-    public StackPane root;
-    public VBox vbox;
+    private ServiceLocator sl;
+    private Translator tr;
+    private Logger logger;
+
     public TextField usernameField;
     public PasswordField passwordField;
-    public Button confirmButton;
-    public Messenger model;
-    public Label usernameLabel, pwLabel;
-    private ServiceLocator sl = ServiceLocator.getServiceLocator();
-    private Translator tr = sl.getTranslator();
-    private Logger logger = sl.getLogger();
+    public Button confirmButton, closeSuccess, closeTryAgain;
+
+    private VBox vbox;
+    private Main_Model model;
+    private Label usernameLabel, pwLabel;
+
     private Image errorRobo, server;
+    private File image;
     private ImageView headerImage, serverImage;
     private String url;
 
+    private Scene loginProcess, loginSuccessful, loginNotSuccessful, scene;
 
-    public Login_View(Messenger model){
-        loginStage = new Stage();
-        this.model = model;
+
+    public Login_View(Stage stage, Login_Model model) {
+        super(stage, model);
+        stage.setAlwaysOnTop(true);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setAlwaysOnTop(true);
+        stage.setMinHeight(400);
+        stage.setMinWidth(250);
+        stage.setTitle(ServiceLocator.getServiceLocator().getTranslator().getString("windows.login"));
+
+        ServiceLocator.getServiceLocator().getLogger().info("Login View initialized");
+    }
+
+
+    public Scene create_GUI(){
+        sl = ServiceLocator.getServiceLocator();
+        tr = sl.getTranslator();
+        logger = sl.getLogger();
+
+        StackPane root = new StackPane();
         vbox = new VBox();
+
+        //Create Scene
+        scene = new Scene(root, 250, 400);
 
         /*Load Image
          * ----------------------------------------*/
         try {
             url = System.getProperty("user.dir");
             url += "/src/Image/login_robo.png";
-            File image = new File(url);
+            image = new File(url);
             url = image.toURI().toURL().toString();
             errorRobo = new Image(url);
             headerImage = new ImageView(errorRobo);
@@ -61,7 +84,6 @@ public class Login_View {
             headerImage.setFitWidth(70);
             headerImage.getStyleClass().add("headerIcon");
             vbox.getChildren().add(headerImage);
-            logger.fine("Image loaded.");
         } catch (Exception e){
             e.printStackTrace();
             logger.warning("Image could not be loaded. \n Stack Trace: "+e.getStackTrace().toString());
@@ -81,38 +103,24 @@ public class Login_View {
 
         //Add fields to VBox
         vbox.getChildren().addAll(usernameLabel, usernameField, pwLabel, passwordField, confirmButton);
-        root = new StackPane();
         root.getChildren().add(vbox);
         root.setAlignment(vbox, Pos.CENTER);
         vbox.setSpacing(20);
         vbox.setAlignment(Pos.CENTER);
 
-        //Create Scene
-        Scene scene = new Scene(root, 250, 400);
-        loginStage.setAlwaysOnTop(true);
-        loginStage.setMinHeight(400);
-        loginStage.setMinWidth(250);
-        loginStage.setTitle(tr.getString("windows.login"));
-        loginStage.setScene(scene);
-
         String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
 
-        confirmButton.setOnAction(event -> {
-            logger.fine("Button: Confirm");
-            loginSequence(); //TODO
-        });
+        /*Preparation for Login Sequence
+        *------------------------------ */
+        createLoginSequence_GUI();
+        createLoginSuccessfull_GUI();
+        createLoginNotSuccessfull_GUI();
+
+        return scene;
     }
 
-    public void start(){
-        loginStage.show();
-    }
-
-    public void stop() {
-        loginStage.hide();
-    }
-
-    public void loginSequence(){
+    private void createLoginSequence_GUI(){
         VBox vboxProcess = new VBox();
         Group group = new Group();
 
@@ -121,7 +129,7 @@ public class Login_View {
         try {
             url = System.getProperty("user.dir");
             url += "/src/Image/server.png";
-            File image = new File(url);
+            image = new File(url);
             url = image.toURI().toURL().toString();
             server = new Image(url);
             serverImage = new ImageView(server);
@@ -167,18 +175,12 @@ public class Login_View {
         vboxProcess.setAlignment(Pos.CENTER);
         vboxProcess.setSpacing(20);
 
-        Scene loginProcess = new Scene(vboxProcess, 250, 400);
-        loginStage.setScene(loginProcess);
-
-
-//        TODO Buffer for Login
-        Buffer buffer = new Buffer();
-        Thread wait = new Thread(buffer);
-        wait.start();
+        loginProcess = new Scene(vboxProcess, 250, 400);
     }
 
-    public void loginSuccessfull(){
+    private void createLoginSuccessfull_GUI(){
         VBox vboxSuccess = new VBox();
+        loginSuccessful = new Scene(vboxSuccess, 250, 400);
 
         /*Load Success Image
          * ----------------------------------------*/
@@ -197,43 +199,68 @@ public class Login_View {
             logger.warning("Image could not be loaded. \n Stack Trace: "+e.getStackTrace().toString());
         }
 
-        Label sucessLabel = new Label(tr.getString("labels.loginSuccessfull"));
-        Button close = new Button(tr.getString("buttons.close"));
-        close.getStyleClass().add("secondary");
-        sucessLabel.getStyleClass().add("defaultLabel");
+        Label successLabel = new Label(tr.getString("labels.loginSuccessfull"));
+        closeSuccess = new Button(tr.getString("buttons.close"));
+        closeSuccess.getStyleClass().add("secondary");
+        successLabel.getStyleClass().add("defaultLabel");
 
-        vboxSuccess.getChildren().addAll(sucessLabel, close);
+        vboxSuccess.getChildren().addAll(successLabel, closeSuccess);
         vboxSuccess.setAlignment(Pos.CENTER);
         vboxSuccess.setSpacing(20);
-
-        Scene loginSuccessful = new Scene(vboxSuccess, 250, 400);
 
         String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
         loginSuccessful.getStylesheets().add(stylesheet);
 
-        loginStage.setScene(loginSuccessful);
-
-        /*Listeners for Button presses
-        * ---------------------------------*/
-        close.setOnAction(click -> {
-            this.stop();
-        });
     }
 
+    private void createLoginNotSuccessfull_GUI(){
+        VBox vboxNoSuccess = new VBox();
+        loginNotSuccessful = new Scene(vboxNoSuccess, 250, 400);
 
-    public class Buffer implements Runnable {
-
-        @Override
-        public void run() {
-            try {
-                TimeUnit.SECONDS.sleep(7);
-                Platform.runLater(() -> {
-                    loginSuccessfull();
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        /*Load No Success Image
+         * ----------------------------------------*/
+        try {
+            String url = System.getProperty("user.dir");
+            url += "/src/Image/surprized_question_robo.png";
+            File imageNoSuccess = new File(url);
+            url = imageNoSuccess.toURI().toURL().toString();
+            Image noSuccess = new Image(url);
+            ImageView noSuccessImage = new ImageView(noSuccess);
+            noSuccessImage.setFitHeight(70);
+            noSuccessImage.setFitWidth(70);
+            noSuccessImage.getStyleClass().add("headerIcon");
+            vboxNoSuccess.getChildren().add(noSuccessImage);
+        } catch (Exception e){
+            logger.warning("Image could not be loaded. \n Stack Trace: "+e.getStackTrace().toString());
         }
+
+        Label noSuccessLabel = new Label(tr.getString("labels.loginNotSuccessfull"));
+        closeTryAgain = new Button(tr.getString("buttons.tryAgain"));
+        closeTryAgain.getStyleClass().add("secondary");
+        noSuccessLabel.getStyleClass().add("defaultLabel");
+
+        vboxNoSuccess.getChildren().addAll(noSuccessLabel, closeTryAgain);
+        vboxNoSuccess.setAlignment(Pos.CENTER);
+        vboxNoSuccess.setSpacing(20);
+
+        String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+        loginNotSuccessful.getStylesheets().add(stylesheet);
+    }
+
+    public Scene getLoginProcess(){
+        return loginProcess;
+    }
+
+    public Scene getLoginSuccessful(){
+        return loginSuccessful;
+    }
+
+    public Scene getLoginNotSuccessful(){
+        return loginNotSuccessful;
+    }
+
+    public Scene getScene(){
+        return scene;
     }
 
 }

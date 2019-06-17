@@ -15,14 +15,14 @@ public class ChatWindow extends ScrollPane {
     VBox chatHistory;
     VBox message, messageTime;
     Label messageText, time;
-    View view;
+    Main_View view;
     Translator tr = ServiceLocator.getServiceLocator().getTranslator();
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
 
 //    Default Constructor
-    public ChatWindow(View view){
-        this.view = view;
+    public ChatWindow(Main_View mainView){
+        this.view = mainView;
         chatHistory = new VBox();
         chatHistory.prefWidthProperty().bind(this.widthProperty());
         this.setContent(chatHistory);

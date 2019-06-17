@@ -28,7 +28,7 @@ public class Translator {
         }
 
         // Load the resource strings
-        resourceBundle = ResourceBundle.getBundle("Messenger", locale);
+        resourceBundle = ResourceBundle.getBundle("Messenger", locale); //TODO APP Name from SL
         Locale.setDefault(locale); // Change VM default (for dialogs, etc.)
         currentLocale = locale;
 

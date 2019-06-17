@@ -5,10 +5,10 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class View {
+public class Main_View {
 
     Stage stage;
-    Messenger model;
+    Main_Model model;
     ChatWindow chats;
     MainMenu mainMenu;
     ContactsWindow contacts;
@@ -16,7 +16,7 @@ public class View {
     BorderPane chatInteractionContainer;
 
 
-    public View(Stage primaryStage, Messenger model){
+    public Main_View(Stage primaryStage, Main_Model model){
         this.stage = primaryStage;
         this.model = model;
 
@@ -47,7 +47,7 @@ public class View {
 
         //Stage Settings
         Scene scene = new Scene(root, 700, 500);
-        stage.setTitle("Messenger");
+        stage.setTitle("Main_Model");
         stage.setScene(scene);
         stage.setMinWidth(800);
         stage.setMinHeight(400);

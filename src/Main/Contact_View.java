@@ -20,19 +20,19 @@ public class Contact_View {
     Translator tr = ServiceLocator.getServiceLocator().getTranslator();
 
     Stage contactStage;
-    Messenger model;
+    Main_Model model;
     TextField firstName, lastName, username;
     Button saveBtn;
     ToggleButton blocked;
     ImageView blockedIconWhite;
-    View view;
+    Main_View view;
     Contact received;
     HBox buttons;
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
-            public Contact_View(Messenger messenger, View view){
+            public Contact_View(Main_Model mainModel, Main_View mainView){
                 received = null;
-                this.model = messenger;
+                this.model = mainModel;
                 VBox verticalBox = new VBox();
                 verticalBox.getStyleClass().add("windowPopUp");
                 HBox labelBox = new HBox();
@@ -79,9 +79,9 @@ public class Contact_View {
 
                 contactStage.show();
 
-                //Create new Controller
-                Contact_Controller controller = new Contact_Controller(model, this, view);
-                logger.config("Contact Controller created.");
+                //Create new Main_Controller
+                Contact_Controller controller = new Contact_Controller(model, this, mainView);
+                logger.config("Contact Main_Controller created.");
 
 
                 /*Checks if Textfields are empty
@@ -127,9 +127,9 @@ public class Contact_View {
 
             }
 
-    public Contact_View(Messenger messenger, View view, Contact contact){
+    public Contact_View(Main_Model mainModel, Main_View mainView, Contact contact){
                 received = contact;
-        this.model = messenger;
+        this.model = mainModel;
         VBox verticalBox = new VBox();
         verticalBox.getStyleClass().add("windowPopUp");
         HBox labelBox = new HBox();
@@ -206,8 +206,8 @@ public class Contact_View {
 
         contactStage.show();
 
-        //Create new Controller
-        Contact_Controller controller = new Contact_Controller(model, this, view);
+        //Create new Main_Controller
+        Contact_Controller controller = new Contact_Controller(model, this, mainView);
 
 
         /*Checks if Textfields are empty
