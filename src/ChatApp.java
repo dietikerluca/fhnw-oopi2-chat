@@ -83,10 +83,11 @@ public class ChatApp extends Application {
 
         // Close the splash screen, and set the reference to null, so that all
         // Splash_XXX objects can be garbage collected
-        if (loginView == !null){
+        if (loginView != null){
             loginView.stop();
             loginView = null;
-        } else {
+        }
+        if (createAccount_view != null) {
             createAccount_view.stop();
             createAccount_view = null;
         }

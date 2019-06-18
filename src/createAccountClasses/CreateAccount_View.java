@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 
 public class CreateAccount_View extends View {
 
-    ServiceLocator sl = ServiceLocator.getServiceLocator();
-    Translator tr = sl.getTranslator();
-    Logger logger = sl.getLogger();
+    ServiceLocator sl;
+    Translator tr;
+    Logger logger;
 
     private Label usernameLabel, pwLabel, header;
     public TextField usernameField;
@@ -42,6 +42,10 @@ public class CreateAccount_View extends View {
 
     @Override
     protected Scene create_GUI() {
+        sl = ServiceLocator.getServiceLocator();
+        tr = sl.getTranslator();
+        logger = sl.getLogger();
+
         StackPane root = new StackPane();
         VBox vbox = new VBox();
 

@@ -23,7 +23,7 @@ public class ContactCard extends HBox {
 
     public ContactCard(Person person){
 
-        this.name = new Label(contact.getFirstname()+" "+contact.getLastname()); //TODO
+        this.name = new Label(person.getFirstname()+" "+person.getLastname()); //TODO
         this.secondText = new Label("Last seen: 22.06.2019"); //TODO
 
         if (person.isBlocked()) {
