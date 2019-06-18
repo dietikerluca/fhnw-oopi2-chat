@@ -4,6 +4,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import src.Main.ContactCard;
 import src.ServiceLocator;
+import src.typeClasses.Person;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -26,17 +27,17 @@ public class ContactsWindow extends ScrollPane {
     }
 
 
-    public void displayContact(Contact contact){
+    public void displayContact(Person contact){
         contactList.getItems().add(new ContactCard(contact));
     }
 
 
-    public Contact getSelectedContact() {
+    public Person getSelectedContact() {
         ContactCard contactCard = (ContactCard) contactList.getSelectionModel().getSelectedItem();
         return contactCard.getPerson();
     }
 
-    public Contact getFocusedContact() {
+    public Person getFocusedContact() {
         ContactCard contactCard = (ContactCard) contactList.getFocusModel().getFocusedItem();
         return contactCard.getPerson();
     }
@@ -44,11 +45,11 @@ public class ContactsWindow extends ScrollPane {
         return contactList.getItems().isEmpty();
     }
 
-    public void updateContactCards(ArrayList<Contact> contacts){
+    public void updateContactCards(ArrayList<Person> contacts){
         contactList.getItems().clear();
         logger.fine("Contact list cleared");
         logger.fine("Initializing new contacts.");
-        for (Contact c : contacts){
+        for (Person c : contacts){
             displayContact(c);
             logger.finest("Displaying Contact: "+c.getUsername());
         }

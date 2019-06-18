@@ -25,4 +25,24 @@ public class Person {
     public Date getLastMessageReceived() {
         return lastMessageReceived;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public boolean isInContactList() {
+        return inContactList;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
 }

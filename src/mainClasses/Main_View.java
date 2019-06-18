@@ -67,7 +67,7 @@ public class Main_View {
         stage.hide();
     }
 
-    public void updateChatsDisplayed(Contact selectedContact) {
-        chats.displayMessages(selectedContact.getMessages());
-    }
+    // public void updateChatsDisplayed(Contact selectedContact) {
+    //    chats.displayMessages(selectedContact.getMessages());
+    //}
 }

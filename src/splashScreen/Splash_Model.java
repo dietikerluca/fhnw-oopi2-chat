@@ -23,6 +23,8 @@ public class Splash_Model extends Model {
             sl.setLogger(configureLogging());
             sl.setTranslator(new Translator("en"));
 
+            sl.getChatClient().connect();
+
             // Buffer
             try {
                 TimeUnit.SECONDS.sleep(2);

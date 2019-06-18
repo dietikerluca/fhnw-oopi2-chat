@@ -4,7 +4,10 @@ package src.mainClasses;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import src.Main.ContactCard;
+import javafx.collections.ListChangeListener;
+import src.Main.*;
 import src.ServiceLocator;
+import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
 import src.commonViews.ChoicePopUp;
 import src.commonViews.ErrorPopUp;
@@ -17,6 +20,7 @@ import src.preferencesClasses.Preferences_Controller;
 import src.preferencesClasses.Preferences_Model;
 import src.preferencesClasses.Preferences_View;
 import src.typeClasses.Message;
+import src.typeClasses.Person;
 
 import java.awt.*;
 import java.io.IOException;
@@ -43,19 +47,28 @@ public class Main_Controller {
         this.model = model;
         this.view = view;
 
-        //TestMessageGenerator
-        view.mainMenu.testReceived.setOnAction(event -> {
-            logger.fine("Button: Test Message Received");
-            Message msg = new Message("TestMessage Received", true);
-            view.chats.displayNewMessage(msg);
+        ChatClient chatClient = sl.getChatClient();
+        chatClient.getIncomingMessages().addListener((ListChangeListener<Message>) c -> {
+            while (c.next()) {
+                for (Message m : c.getAddedSubList()) {
+                    logger.info(m.toString());
+                }
+            }
         });
 
-        //TestConntactGenerator
-        view.mainMenu.testContact.setOnAction(event -> {
-            logger.fine("Button: Test Contact");
-            Contact contact = new Contact();
-            view.contacts.displayContact(contact);
-        });
+//        //TestMessageGenerator
+//        view.mainMenu.testReceived.setOnAction(event -> {
+//            logger.fine("Button: Test Message Received");
+//            Message msg = new Message("test","testChat","Test Message", true);
+//            view.chats.displayNewMessage(msg);
+//        });
+//
+//        //TestConntactGenerator
+//        view.mainMenu.testContact.setOnAction(event -> {
+//            logger.fine("Button: Test Contact");
+//            Person person = new Person();
+//            view.contacts.displayContact(person);
+//        });
 
         //Show Login Window
         view.mainMenu.login.setOnAction(e -> {
@@ -80,59 +93,59 @@ public class Main_Controller {
         });
 
 
-        //New Message Entered and Sent
-        view.interactionRibbon.sendBtn.setOnAction(event -> {
-            //TODO
-            String msg = view.interactionRibbon.messageField.getText();
-            Message message = new Message(msg, false);
-            if (view.contacts.contactList.getSelectionModel().getSelectedItem() == null){
-                ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
-            } else {
-                view.chats.displayNewMessage(new Message(msg, false));
-                view.interactionRibbon.messageField.clear();
-                ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
-                Contact respectiveContact = contactCard.getPerson();
-                respectiveContact.addMessage(message);
-            }
+//        //New Message Entered and Sent
+//        view.interactionRibbon.sendBtn.setOnAction(event -> {
+//            //TODO
+//            String msg = view.interactionRibbon.messageField.getText();
+//            Message message = new Message(msg, false);
+//            if (view.contacts.contactList.getSelectionModel().getSelectedItem() == null){
+//                ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
+//            } else {
+//                view.chats.displayNewMessage(new Message(msg, false));
+//                view.interactionRibbon.messageField.clear();
+//                ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
+//                Contact respectiveContact = contactCard.getContact();
+//                respectiveContact.addMessage(message);
+//            }
+//
+//        });
 
-        });
-
-        view.interactionRibbon.messageField.setOnKeyPressed(event -> {
-            //TODO
-            if ( event.getCode() == KeyCode.ENTER){
-                String msg = view.interactionRibbon.messageField.getText();
-                Message message = new Message(msg, false);
-                if (view.contacts.contactList.getSelectionModel().getSelectedItem() == null){
-                    ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
-                } else {
-                    view.chats.displayNewMessage(new Message(msg, false));
-                    view.interactionRibbon.messageField.clear();
-                    ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
-                    Contact respectiveContact = contactCard.getPerson();
-                    respectiveContact.addMessage(message);
-                }
-
-            }
-            }
-        );
+//        view.interactionRibbon.messageField.setOnKeyPressed(event -> {
+//            //TODO
+//            if ( event.getCode() == KeyCode.ENTER){
+//                String msg = view.interactionRibbon.messageField.getText();
+//                Message message = new Message(msg, false);
+//                if (view.contacts.contactList.getSelectionModel().getSelectedItem() == null){
+//                    ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
+//                } else {
+//                    view.chats.displayNewMessage(new Message(msg, false));
+//                    view.interactionRibbon.messageField.clear();
+//                    ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
+//                    Contact respectiveContact = contactCard.getContact();
+//                    respectiveContact.addMessage(message);
+//                }
+//
+//            }
+//            }
+//        );
 
         // Contact Creation
-        view.mainMenu.createContact.setOnAction(event -> {
-            logger.fine("Button: Create Contact");
-            System.out.println("OK");
-            Contact_View cw = new Contact_View(this.model, this.view);
-        });
+//        view.mainMenu.createContact.setOnAction(event -> {
+//            logger.fine("Button: Create Contact");
+//            System.out.println("OK");
+//            Contact_View cw = new Contact_View(this.model, this.view);
+//        });
 
         //If selected Contact changes change messages displayed
-        view.contacts.contactList.getSelectionModel().selectedItemProperty().addListener(change -> {
-            try {
-                logger.fine("New selected Contact: " + view.contacts.getSelectedContact().getPrename() + " " +
-                        view.contacts.getSelectedContact().getLastname());
-                view.updateChatsDisplayed(view.contacts.getSelectedContact());
-            } catch (Exception e){
-                logger.warning("No Contact found.");
-            }
-        });
+//        view.contacts.contactList.getSelectionModel().selectedItemProperty().addListener(change -> {
+//            try {
+//                logger.fine("New selected Contact: " + view.contacts.getSelectedContact().getPrename() + " " +
+//                        view.contacts.getSelectedContact().getLastname());
+//                view.updateChatsDisplayed(view.contacts.getSelectedContact());
+//            } catch (Exception e){
+//                logger.warning("No Contact found.");
+//            }
+//        });
 
         /*Help Menu
         * ------------------------------------*/
@@ -168,45 +181,45 @@ public class Main_Controller {
 
         /*Contact Context Menu Request
         * ------------------------------------*/
-        view.contacts.contactList.setOnContextMenuRequested(request -> {
-            logger.fine("Context Menu Request discovered");
-            if (view.contacts.isEmpty()){
-                logger.info("No Contacts in the list");
-            } else {
-                Contact contact = view.contacts.getFocusedContact();
-                logger.fine("Selected Contact: "+contact.getPrename());
-                if (!contact.getInContactList()){
-                    logger.info(contact.getPrename()+" not in contact list.");
-                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContact"),
-                            tr.getString("buttons.createContact"),
-                            tr.getString("buttons.close"),
-                            tr.getString("windows.newContactChoice"));
-
-                    choicePopUp.primaryBtn.setOnAction(action -> {
-                        choicePopUp.stop();
-                        Contact_View contactsWindow = new Contact_View(model, view, contact);
-                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
-                    });
-
-                } else {
-                    logger.info(contact.getPrename()+" exists in contact list already.");
-                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContactExisting"),
-                            tr.getString("buttons.edit"),
-                            tr.getString("buttons.close"),
-                            tr.getString("windows.editContact"));
-
-                    choicePopUp.primaryBtn.setOnAction(action -> {
-                        choicePopUp.stop();
-                        Contact_View contactsWindow = new Contact_View(model, view, contact);
-                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
-                    });
-
-
-
-            }
-
-        }
-        });
+//        view.contacts.contactList.setOnContextMenuRequested(request -> {
+//            logger.fine("Context Menu Request discovered");
+//            if (view.contacts.isEmpty()){
+//                logger.info("No Contacts in the list");
+//            } else {
+//                Contact contact = view.contacts.getFocusedContact();
+//                logger.fine("Selected Contact: "+contact.getPrename());
+//                if (!contact.getInContactList()){
+//                    logger.info(contact.getPrename()+" not in contact list.");
+//                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContact"),
+//                            tr.getString("buttons.createContact"),
+//                            tr.getString("buttons.close"),
+//                            tr.getString("windows.newContactChoice"));
+//
+//                    choicePopUp.primaryBtn.setOnAction(action -> {
+//                        choicePopUp.stop();
+//                        Contact_View contactsWindow = new Contact_View(model, view, contact);
+//                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
+//                    });
+//
+//                } else {
+//                    logger.info(contact.getPrename()+" exists in contact list already.");
+//                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContactExisting"),
+//                            tr.getString("buttons.edit"),
+//                            tr.getString("buttons.close"),
+//                            tr.getString("windows.editContact"));
+//
+//                    choicePopUp.primaryBtn.setOnAction(action -> {
+//                        choicePopUp.stop();
+//                        Contact_View contactsWindow = new Contact_View(model, view, contact);
+//                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
+//                    });
+//
+//
+//
+//            }
+//
+//        }
+//        });
 
 
     }

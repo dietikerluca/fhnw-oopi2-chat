@@ -4,6 +4,7 @@ import src.ChatApp;
 import src.ServiceLocator;
 import src.abstractClasses.Controller;
 import javafx.concurrent.Worker;
+import src.commonClasses.ChatClient;
 
 import java.util.logging.Logger;
 
@@ -19,18 +20,22 @@ public class Login_Controller extends Controller {
         view.confirmButton.setOnAction(event -> {
             logger.fine("Button: Confirm");
             view.getStage().setScene(view.getLoginProcess());
+
+            model.setUsername(view.usernameField.getText());
+            model.setPassword(view.passwordField.getText());
+
             model.initialize();
+            model.getInitializer().stateProperty().addListener(((observable, oldValue, newValue) -> {
+                if (newValue == Worker.State.SUCCEEDED){
+                    if (model.isLoginSuccessful()) {
+                        view.getStage().setScene(view.getLoginSuccessful());
+                    } else {
+                        view.getStage().setScene(view.getLoginError());
+                    }
+                }
+            }));
         });
 
-        model.initializer.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.SUCCEEDED){
-                if(!model.isLoginSuccessful()) { //TODO
-                    view.getStage().setScene(view.getLoginSuccessful());
-                } else {
-                    view.getStage().setScene(view.getLoginError());
-                }
-            }
-        }));
 
         view.closeTryAgain.setOnAction(event -> {
             view.getStage().setScene(view.getScene());
@@ -39,7 +44,6 @@ public class Login_Controller extends Controller {
         view.closeSuccess.setOnAction(event -> {
             main.startApp();
         });
-
     }
 
     public Login_Controller(Login_Model model, Login_View view) {
@@ -49,17 +53,17 @@ public class Login_Controller extends Controller {
             logger.fine("Button: Confirm");
             view.getStage().setScene(view.getLoginProcess());
             model.initialize();
-        });
 
-        model.initializer.stateProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue == Worker.State.SUCCEEDED){
-                if(!model.isLoginSuccessful()) { //TODO
-                    view.getStage().setScene(view.getLoginSuccessful());
-                } else {
-                    view.getStage().setScene(view.getLoginError());
+            model.getInitializer().stateProperty().addListener(((observable, oldValue, newValue) -> {
+                if (newValue == Worker.State.SUCCEEDED){
+                    if(!model.isLoginSuccessful()) { //TODO
+                        view.getStage().setScene(view.getLoginSuccessful());
+                    } else {
+                        view.getStage().setScene(view.getLoginError());
+                    }
                 }
-            }
-        }));
+            }));
+        });
 
         view.closeTryAgain.setOnAction(event -> {
             view.getStage().setScene(view.getScene());

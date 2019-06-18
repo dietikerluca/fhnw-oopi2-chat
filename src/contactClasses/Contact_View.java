@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import src.mainClasses.Main_Model;
 import src.mainClasses.Main_View;
+import src.typeClasses.Person;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ public class Contact_View {
     ToggleButton blocked;
     ImageView blockedIconWhite;
     Main_View view;
-    Contact received;
+    Person received;
     HBox buttons;
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
@@ -131,7 +132,7 @@ public class Contact_View {
 
             }
 
-    public Contact_View(Main_Model mainModel, Main_View mainView, Contact contact){
+    public Contact_View(Main_Model mainModel, Main_View mainView, Person contact){
                 received = contact;
         this.model = mainModel;
         VBox verticalBox = new VBox();
@@ -166,7 +167,7 @@ public class Contact_View {
         verticalBox.getChildren().addAll(labelBox, nameBox, userNameBox, spacer, buttons);
 
         //Add Contact details already delivered
-        firstName.setText(contact.getPrename());
+        firstName.setText(contact.getFirstname());
         lastName.setText(contact.getLastname());
         username.setText(contact.getUsername());
 
@@ -281,7 +282,7 @@ public class Contact_View {
                 this.contactStage.hide();
             }
 
-            public Contact getExisting(){
+            public Person getExisting(){
                 return this.received;
             }
 

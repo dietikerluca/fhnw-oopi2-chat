@@ -1,5 +1,6 @@
 package src;
 
+import src.commonClasses.ChatClient;
 import src.commonClasses.Configuration;
 import src.commonClasses.Translator;
 
@@ -15,14 +16,18 @@ public class ServiceLocator {
     // Supported locales (for translations)
     final private Locale[] locales = new Locale[] { new Locale("en"), new Locale("de") };
 
-    //Default Values User has set
-    private String ipAddressPreset = "192.168.1.0";
-    private int port = 82;
+    // Default Values User has set
+    private String ipAddressPreset = "147.86.8.31";
+    private int port = 50001;
 
     private Logger logger;
     private Configuration configuration;
     private Translator translator;
+    private ChatClient chatClient;
 
+    private ServiceLocator() {
+
+    }
 
     public static ServiceLocator getServiceLocator() {
         if (serviceLocator == null)
@@ -36,10 +41,6 @@ public class ServiceLocator {
 
     public void setPort(int port) {
         this.port = port;
-    }
-
-    private ServiceLocator() {
-
     }
 
     public Class<?> getAPP_CLASS() {
@@ -74,7 +75,8 @@ public class ServiceLocator {
     public Translator getTranslator() {
         if (translator == null){
             translator = new Translator("English");
-        } return translator;
+        }
+        return translator;
     }
 
     public void setTranslator(Translator translator) {
@@ -82,6 +84,12 @@ public class ServiceLocator {
         logger.config("Translator Set to "+translator.getCurrentLocale().getLanguage());
     }
 
+    public ChatClient getChatClient() {
+        if (chatClient == null) {
+            chatClient = new ChatClient(ipAddressPreset, port);
+        }
+        return chatClient;
+    }
 
     public String getIpAddressPreset() {
         return ipAddressPreset;
