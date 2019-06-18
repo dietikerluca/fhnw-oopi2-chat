@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import src.ServiceLocator;
+import src.typeClasses.Person;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -16,16 +17,16 @@ public class ContactCard extends HBox {
     VBox contactInfoContainer;
     Label name, secondText;
     Ellipse status;
-    private Contact contact;
+    private Person person;
     ServiceLocator sl = ServiceLocator.getServiceLocator();
     Logger logger = sl.getLogger();
 
-    public ContactCard(Contact contact){
+    public ContactCard(Person person){
 
-        this.name = new Label(contact.getPrename()+" "+contact.getLastname()); //TODO
+        this.name = new Label(person.getFirstName()+" "+person.getLastName()); //TODO
         this.secondText = new Label("Last seen: 22.06.2019"); //TODO
 
-        if (contact.isBlocked()) {
+        if (person.isBlocked()) {
             /*Load BlockedImage
              * ----------------------------------------*/
             try {
@@ -53,7 +54,7 @@ public class ContactCard extends HBox {
             this.secondText.getStyleClass().add("TextContactCardSecond");
             this.getChildren().add(status);
         }
-        this.contact = contact;
+        this.person = person;
         this.getStyleClass().add("ContactCard");
         this.contactInfoContainer = new VBox();
         this.contactInfoContainer.getStyleClass().add("ContactCardTextContainer");
@@ -62,8 +63,8 @@ public class ContactCard extends HBox {
 
     }
 
-    public Contact getContact(){
-        return this.contact;
+    public Person getPerson(){
+        return this.person;
     }
 
 }

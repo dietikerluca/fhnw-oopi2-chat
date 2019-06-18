@@ -1,9 +1,13 @@
 package src.splashScreen;
 
+import javafx.concurrent.Worker;
+import javafx.stage.Stage;
 import src.ChatApp;
 import src.ServiceLocator;
 import src.abstractClasses.Controller;
-import javafx.concurrent.Worker;
+import src.createAccountClasses.CreateAccount_Controller;
+import src.createAccountClasses.CreateAccount_Model;
+import src.createAccountClasses.CreateAccount_View;
 
 public class Splash_Controller extends Controller {
 
@@ -22,7 +26,11 @@ public class Splash_Controller extends Controller {
         });
 
         view.createAccount.setOnAction(event -> {
-            main.startApp();
+            CreateAccount_Model createAccount_model = new CreateAccount_Model();
+            CreateAccount_View createAccount_view = new CreateAccount_View(new Stage(), createAccount_model);
+            CreateAccount_Controller createAccount_controller = new CreateAccount_Controller(createAccount_model, createAccount_view);
+
+            createAccount_view.start();
         });
     }
 }

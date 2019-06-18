@@ -1,12 +1,12 @@
 package src.mainClasses;
 
-import src.Main.ErrorPopUp;
-import src.typeClasses.Message;
-import src.ServiceLocator;
-import src.commonClasses.Translator;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import src.ServiceLocator;
+import src.commonClasses.Translator;
+import src.commonViews.ErrorPopUp;
+import src.typeClasses.Message;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;

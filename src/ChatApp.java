@@ -3,6 +3,9 @@ package src;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import src.createAccountClasses.CreateAccount_Controller;
+import src.createAccountClasses.CreateAccount_Model;
+import src.createAccountClasses.CreateAccount_View;
 import src.loginClasses.Login_Controller;
 import src.loginClasses.Login_Model;
 import src.loginClasses.Login_View;
@@ -19,6 +22,7 @@ public class ChatApp extends Application {
     private Splash_View splashView;
     private Login_View loginView;
     private Main_View mainView;
+    private CreateAccount_View createAccount_view;
 
     @Override
     public void init() {
@@ -54,6 +58,20 @@ public class ChatApp extends Application {
         loginView.start();
     }
 
+    public void startAccountCreation() {
+        Stage createAccountStage = new Stage();
+
+        //Create and display Login Screen
+        CreateAccount_Model createAccount_model = new CreateAccount_Model();
+        createAccount_view = new CreateAccount_View(createAccountStage, createAccount_model);
+        new CreateAccount_Controller(this, createAccount_model, createAccount_view);
+
+        splashView.stop();
+        splashView = null;
+
+        createAccount_view.start();
+    }
+
 
     public void startApp() {
         Stage appStage = new Stage();
@@ -65,8 +83,13 @@ public class ChatApp extends Application {
 
         // Close the splash screen, and set the reference to null, so that all
         // Splash_XXX objects can be garbage collected
-        loginView.stop();
-        loginView = null;
+        if (loginView == !null){
+            loginView.stop();
+            loginView = null;
+        } else {
+            createAccount_view.stop();
+            createAccount_view = null;
+        }
 
         mainView.start();
     }

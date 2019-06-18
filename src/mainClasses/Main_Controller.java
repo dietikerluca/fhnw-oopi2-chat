@@ -1,14 +1,15 @@
 package src.mainClasses;
 
 
-import src.Main.*;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
+import src.Main.ContactCard;
 import src.ServiceLocator;
 import src.commonClasses.Translator;
 import src.commonViews.ChoicePopUp;
+import src.commonViews.ErrorPopUp;
 import src.contactClasses.Contact_Controller;
 import src.contactClasses.Contact_View;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 import src.loginClasses.Login_Controller;
 import src.loginClasses.Login_Model;
 import src.loginClasses.Login_View;
@@ -90,7 +91,7 @@ public class Main_Controller {
                 view.chats.displayNewMessage(new Message(msg, false));
                 view.interactionRibbon.messageField.clear();
                 ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
-                Contact respectiveContact = contactCard.getContact();
+                Contact respectiveContact = contactCard.getPerson();
                 respectiveContact.addMessage(message);
             }
 
@@ -107,7 +108,7 @@ public class Main_Controller {
                     view.chats.displayNewMessage(new Message(msg, false));
                     view.interactionRibbon.messageField.clear();
                     ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
-                    Contact respectiveContact = contactCard.getContact();
+                    Contact respectiveContact = contactCard.getPerson();
                     respectiveContact.addMessage(message);
                 }
 

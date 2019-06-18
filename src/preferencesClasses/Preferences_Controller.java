@@ -1,10 +1,9 @@
 package src.preferencesClasses;
 
-import src.commonViews.ChoicePopUp;
-import src.Main.ErrorPopUp;
 import src.ServiceLocator;
 import src.abstractClasses.Controller;
 import src.commonClasses.Translator;
+import src.commonViews.ErrorPopUp;
 import src.mainClasses.Main_View;
 
 import java.util.logging.Logger;

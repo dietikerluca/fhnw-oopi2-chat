@@ -33,12 +33,12 @@ public class ContactsWindow extends ScrollPane {
 
     public Contact getSelectedContact() {
         ContactCard contactCard = (ContactCard) contactList.getSelectionModel().getSelectedItem();
-        return contactCard.getContact();
+        return contactCard.getPerson();
     }
 
     public Contact getFocusedContact() {
         ContactCard contactCard = (ContactCard) contactList.getFocusModel().getFocusedItem();
-        return contactCard.getContact();
+        return contactCard.getPerson();
     }
     public boolean isEmpty(){
         return contactList.getItems().isEmpty();
