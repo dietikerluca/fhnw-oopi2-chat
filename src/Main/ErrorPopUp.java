@@ -1,4 +1,4 @@
-package Main;
+package src.Main;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import src.ServiceLocator;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -22,11 +23,11 @@ public class ErrorPopUp {
         Stage errorStage = new Stage();
         VBox vbox = new VBox();
 
-        /*Load Image
+        /*Load src.assets
         * ----------------------------------------*/
         try {
             String url = System.getProperty("user.dir");
-            url += "/src/Image/sad_error_robo.png";
+            url += "/src/assets/img/sad_error_robo.png";
             File image = new File(url);
             url = image.toURI().toURL().toString();
             Image errorRobo = new Image(url);
@@ -36,7 +37,7 @@ public class ErrorPopUp {
             headerImage.getStyleClass().add("headerIcon");
             vbox.getChildren().add(headerImage);
         } catch (Exception e){
-            logger.warning("Image could not be loaded.");
+            logger.warning("src.assets could not be loaded.");
         }
         Label errorMessage = new Label(errorMessageString);
         errorMessage.getStyleClass().add("errorMessage");
