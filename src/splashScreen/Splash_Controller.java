@@ -24,18 +24,8 @@ public class Splash_Controller extends Controller {
                 if (newValue == Worker.State.SUCCEEDED) view.getStage().setScene(view.createLoginOption_GUI());
             });
 
-        view.login.setOnAction(event -> {
-            main.startLogin();
-        });
-
-        view.createAccount.setOnAction(event -> {
-            CreateAccount_Model createAccount_model = new CreateAccount_Model();
-            CreateAccount_View createAccount_view = new CreateAccount_View(new Stage(), createAccount_model);
-            CreateAccount_Controller createAccount_controller = new CreateAccount_Controller(main,
-                    createAccount_model, createAccount_view);
-
-            createAccount_view.start();
-        });
+        view.login.setOnAction(event -> main.startLogin());
+        view.createAccount.setOnAction(event -> main.startAccountCreation());
 
         view.changeServer.setOnAction(event -> {
             Stage serverChangeStage = new Stage();

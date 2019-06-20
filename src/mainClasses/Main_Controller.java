@@ -3,12 +3,14 @@ package src.mainClasses;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.collections.ListChangeListener;
-import javafx.stage.Stage;
 import src.ServiceLocator;
 import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
+import src.commonViews.ChatroomsList;
 import src.commonViews.ChoicePopUp;
 import src.commonViews.ErrorPopUp;
+import src.contactClasses.Contact_Controller;
+import src.contactClasses.Contact_View;
 import src.loginClasses.Login_Controller;
 import src.loginClasses.Login_Model;
 import src.loginClasses.Login_View;
@@ -18,6 +20,8 @@ import src.preferencesClasses.Preferences_View;
 import src.startChatClasses.*;
 import src.typeClasses.Chat;
 import src.typeClasses.Message;
+import src.typeClasses.Person;
+import src.typeClasses.PrivateChat;
 
 import java.awt.*;
 import java.io.IOException;
@@ -35,24 +39,37 @@ public class Main_Controller {
     Preferences_View preferences_view;
     Preferences_Controller prefController;
 
-    ServiceLocator sl = ServiceLocator.getServiceLocator();
-    Translator tr = sl.getTranslator();
-    Logger logger = sl.getLogger();
+    ServiceLocator sl;
+    Translator tr;
+    Logger logger;
+    ChatClient chatClient;
 
 
     public Main_Controller(Main_Model model, Main_View view){
         this.model = model;
         this.view = view;
 
-        ChatClient chatClient = sl.getChatClient();
+        sl = ServiceLocator.getServiceLocator();
+        tr = sl.getTranslator();
+        logger = sl.getLogger();
+        chatClient = sl.getChatClient();
 
+        // Listen for incoming messages
         chatClient.getIncomingMessages().addListener((ListChangeListener<Message>) c -> {
             while (c.next()) {
                 for (Message m : c.getAddedSubList()) model.receiveMessage(m);
             }
         });
 
-        view.mainMenu.joinChatRoom.setOnAction(e -> model.joinChatroom("CatChat"));
+        view.mainMenu.joinChatRoom.setOnAction(e -> {
+            ChatroomsList chatroomsList = new ChatroomsList();
+
+            chatroomsList.chatroomsList.setOnMouseClicked(event -> {
+                String roomName = chatroomsList.chatroomsList.getSelectionModel().getSelectedItem();
+                chatroomsList.stop();
+                model.joinChatroom(roomName);
+            });
+        });
 
         // Show Login Window
         view.mainMenu.login.setOnAction(e -> {
@@ -81,13 +98,6 @@ public class Main_Controller {
                 if (event.getCode() == KeyCode.ENTER) sendMessageAction();
             }
         );
-
-        // Contact Creation
-//        view.mainMenu.createContact.setOnAction(event -> {
-//            logger.fine("Button: Create Contact");
-//            System.out.println("OK");
-//            Contact_View cw = new Contact_View(this.model, this.view);
-//        });
 
         view.chatList.getChatList().getSelectionModel().selectedItemProperty().addListener(change -> {
             model.setCurrentChat(view.chatList.getSelectedChat());
@@ -140,48 +150,25 @@ public class Main_Controller {
             createChatroom_view.start();
         });
 
+        // Edit Person
+        view.chatList.setOnContextMenuRequested(request -> {
+            logger.fine("Context Menu Request discovered");
+            if (view.chatList.isEmpty()){
+                logger.info("No Contacts in the list");
+            } else {
+                Chat chat = view.chatList.getFocusedChat();
+                logger.fine("Selected Chat: " + chat.getName());
 
-        /*Contact Context Menu Request
-        * ------------------------------------*/
-//        view.contacts.chatList.setOnContextMenuRequested(request -> {
-//            logger.fine("Context Menu Request discovered");
-//            if (view.contacts.isEmpty()){
-//                logger.info("No Contacts in the list");
-//            } else {
-//                Contact contact = view.contacts.getFocusedContact();
-//                logger.fine("Selected Contact: "+contact.getPrename());
-//                if (!contact.getInContactList()){
-//                    logger.info(contact.getPrename()+" not in contact list.");
-//                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContact"),
-//                            tr.getString("buttons.createContact"),
-//                            tr.getString("buttons.close"),
-//                            tr.getString("windows.newContactChoice"));
-//
-//                    choicePopUp.primaryBtn.setOnAction(action -> {
-//                        choicePopUp.stop();
-//                        Contact_View contactsWindow = new Contact_View(model, view, contact);
-//                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
-//                    });
-//
-//                } else {
-//                    logger.info(contact.getPrename()+" exists in contact list already.");
-//                    ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.contextContactExisting"),
-//                            tr.getString("buttons.edit"),
-//                            tr.getString("buttons.close"),
-//                            tr.getString("windows.editContact"));
-//
-//                    choicePopUp.primaryBtn.setOnAction(action -> {
-//                        choicePopUp.stop();
-//                        Contact_View contactsWindow = new Contact_View(model, view, contact);
-//                        Contact_Controller conCon = new Contact_Controller(model, contactsWindow, view);
-//                    });
-//
-//
-//
-//            }
-//
-//        }
-//        });
+                if (chat instanceof PrivateChat) {
+                    Person person = ((PrivateChat) chat).getPerson();
+
+                    Contact_View contactsWindow = new Contact_View(model, view, person);
+                    new Contact_Controller(model, contactsWindow, view);
+                } else {
+
+                }
+            }
+        });
     }
 
     void sendMessageAction () {

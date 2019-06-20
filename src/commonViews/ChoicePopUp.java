@@ -84,6 +84,7 @@ public class ChoicePopUp {
         sl = ServiceLocator.getServiceLocator();
         logger = sl.getLogger();
         popUpStage = new Stage();
+        popUpStage.initStyle(StageStyle.UNDECORATED);
         VBox vbox = new VBox();
 
         // Load header image

@@ -1,14 +1,20 @@
 package src.createAccountClasses;
 
+import src.ServiceLocator;
 import src.abstractClasses.Model;
+import src.commonClasses.ChatClient;
 
 public class CreateAccount_Model extends Model {
+    private ServiceLocator sl;
+
     private String username;
     private String password;
 
     public boolean createAccount(){
-        //TODO Create Account
-        return false;
+        sl = ServiceLocator.getServiceLocator();
+        ChatClient chatClient = sl.getChatClient();
+
+        return chatClient.createLogin(username, password);
     }
 
     public String getUsername() {

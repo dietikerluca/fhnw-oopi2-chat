@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,12 +16,13 @@ import java.util.logging.Logger;
 
 public class ChatroomsList {
     Stage chatroomsListStage;
-    public Button primaryBtn, secondaryBtn;
+    public ListView<String> chatroomsList;
     ServiceLocator sl;
-    Logger logger = sl.getLogger();
+    Logger logger;
 
     public ChatroomsList(){
         sl =  ServiceLocator.getServiceLocator();
+        logger = sl.getLogger();
 
         chatroomsListStage = new Stage();
         //chatroomsListStage.initStyle(StageStyle.UNDECORATED);
@@ -28,13 +30,16 @@ public class ChatroomsList {
 
         Label popupMessage = new Label("Select a Chatroom");
 
-        vbox.getChildren().addAll(popupMessage);
+        chatroomsList = new ListView<>();
+        getChatroomsList();
+
+        vbox.getChildren().addAll(popupMessage, chatroomsList);
         vbox.setSpacing(30);
         vbox.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(vbox,400,250);
 
-        scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
+        scene.getStylesheets().add(sl.getClass().getResource("stylesheet.css").toExternalForm());
 
         chatroomsListStage.setScene(scene);
         chatroomsListStage.setTitle("Select a Chatroom");
@@ -45,21 +50,14 @@ public class ChatroomsList {
         chatroomsListStage.setMaxWidth(400);
         chatroomsListStage.setMaxHeight(250);
         chatroomsListStage.show();
+    }
 
-        chatroomsListStage.setOnCloseRequest(event -> {
-            logger.info("User tried to close window.");
-            event.consume();
-        });
+    private void getChatroomsList() {
+        String[] chatrooms =  sl.getChatClient().listChatrooms();
 
-        primaryBtn.setOnAction(event -> {
-            chatroomsListStage.close();
-            logger.finest("Userchoice: Primary Button");
-        });
-
-        secondaryBtn.setOnAction(event -> {
-            chatroomsListStage.close();
-            logger.finest("Userchoice: Secondary Button");
-        });
+        for (String chatroomName : chatrooms) {
+            chatroomsList.getItems().add(chatroomName);
+        }
     }
 
     public void stop() {

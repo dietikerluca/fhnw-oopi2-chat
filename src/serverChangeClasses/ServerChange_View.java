@@ -54,7 +54,9 @@ public class ServerChange_View extends View {
         ipLabel = new Label("IP Address:");
         portLabel = new Label("Port:");
         ipAddress = new TextField();
+        ipAddress.setText(sl.getIpAddressPreset());
         port = new TextField();
+        port.setText(Integer.toString(sl.getPort()));
         confirm = new Button("Save");
         HBox spacer = new HBox();
         spacer.setMinHeight(20);

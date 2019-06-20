@@ -10,15 +10,15 @@ import src.commonViews.ErrorPopUp;
 import java.util.logging.Logger;
 
 public class CreateAccount_Controller extends Controller {
-
-    private ChatApp main;
-    private ServiceLocator sl = ServiceLocator.getServiceLocator();
-    private Translator tr = sl.getTranslator();
-    private Logger logger = sl.getLogger();
+    private ServiceLocator sl;
+    private Translator tr;
+    private Logger logger;
 
     public CreateAccount_Controller(ChatApp main, CreateAccount_Model model, CreateAccount_View view) {
         super(model, view);
-        this.main = main;
+        sl = ServiceLocator.getServiceLocator();
+        tr = sl.getTranslator();
+        logger = sl.getLogger();
 
         view.confirmButton.setOnAction(event -> {
             logger.fine("Button: Confirm");
@@ -32,14 +32,13 @@ public class CreateAccount_Controller extends Controller {
                         tr.getString("buttons.yeah"),
                         tr.getString("windows.AccountSuccess"));
 
-                success.secondaryBtn.setOnAction(event1 -> {
+                success.secondaryBtn.setOnAction(successEvent -> {
+                    success.stop();
                     main.startApp(model.getUsername());
                 });
 
             } else {
-                ErrorPopUp error = new ErrorPopUp(
-                        tr.getString("ErrorMessages.accountCreation"),
-                        tr.getString("buttons.tryAgain"));
+                new ErrorPopUp(tr.getString("ErrorMessages.accountCreation"), tr.getString("buttons.tryAgain"));
             }
         });
     }
