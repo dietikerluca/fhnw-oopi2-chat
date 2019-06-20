@@ -3,6 +3,7 @@ package src.mainClasses;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.collections.ListChangeListener;
+import javafx.stage.Stage;
 import src.ServiceLocator;
 import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
@@ -14,9 +15,7 @@ import src.loginClasses.Login_View;
 import src.preferencesClasses.Preferences_Controller;
 import src.preferencesClasses.Preferences_Model;
 import src.preferencesClasses.Preferences_View;
-import src.startChatClasses.StartChat_Controller;
-import src.startChatClasses.StartChat_Model;
-import src.startChatClasses.StartChat_View;
+import src.startChatClasses.*;
 import src.typeClasses.Chat;
 import src.typeClasses.Message;
 
@@ -130,6 +129,15 @@ public class Main_Controller {
             StartChat_View startChat_view = new StartChat_View(startChat_Stage, startChat_model);
             StartChat_Controller startChat_controller = new StartChat_Controller(startChat_model, startChat_view);
             startChat_view.start();
+        });
+
+        view.mainMenu.newChatRoom.setOnAction(event -> {
+            Stage createChatroom_Stage = new Stage();
+            CreateChatroom_Model createChatroom_model = new CreateChatroom_Model();
+            CreateChatroom_View createChatroom_view = new CreateChatroom_View(createChatroom_Stage, createChatroom_model);
+            CreateChatroom_Controller createChatroom_controller = new CreateChatroom_Controller(
+                    createChatroom_model, createChatroom_view);
+            createChatroom_view.start();
         });
 
 
