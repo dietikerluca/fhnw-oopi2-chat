@@ -67,7 +67,6 @@ public class ChatClient {
                                     sl.getLogger().warning("Got return value but there are no Commands in the queue");
                                 }
                             }
-
                         } catch (IOException e) {
                             break;
                         }
@@ -142,7 +141,7 @@ public class ChatClient {
         return false;
     }
 
-    public boolean joinChatroom(String chatroom, boolean user) {
+    public boolean joinChatroom(String chatroom, String user) {
         if (token != null) {
             String[] response = sendCommand("JoinChatroom|" + token + "|" + chatroom + "|" + user).parseReturnValue();
             return response[1].equals("true");
@@ -150,7 +149,7 @@ public class ChatClient {
         return false;
     }
 
-    public boolean leaveChatroom(String chatroom, boolean user) {
+    public boolean leaveChatroom(String chatroom, String user) {
         if (token != null) {
             String[] response = sendCommand("LeaveChatroom|" + token + "|" + chatroom + "|" + user).parseReturnValue();
             return response[1].equals("true");
@@ -176,6 +175,14 @@ public class ChatClient {
             }
         }
         return null;
+    }
+
+    public boolean sendMessage(String target, String message) {
+        if (token != null) {
+            String[] response = sendCommand("SendMessage|" + token + "|" + target + "|" + message).parseReturnValue();
+            return response[1].equals("true");
+        }
+        return false;
     }
 
     public boolean isConnected() {

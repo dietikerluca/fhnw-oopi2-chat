@@ -7,12 +7,11 @@ import javafx.stage.Stage;
 import src.ServiceLocator;
 
 public class Main_View {
-
     Stage stage;
     Main_Model model;
-    ChatWindow chats;
+    ChatWindow chatWindow;
     MainMenu mainMenu;
-    ContactsWindow contacts;
+    ChatList chatList;
     InteractionRibbon interactionRibbon;
     BorderPane chatInteractionContainer;
     ServiceLocator sl;
@@ -28,24 +27,24 @@ public class Main_View {
         mainMenu = new MainMenu();
 
         // New ChatWindow
-        chats = new ChatWindow(this);
+        chatWindow = new ChatWindow(model);
         interactionRibbon = new InteractionRibbon(model);
+
         chatInteractionContainer = new BorderPane();
         chatInteractionContainer.setBottom(interactionRibbon);
-        chatInteractionContainer.setCenter(chats);
+        chatInteractionContainer.setCenter(chatWindow);
 
-        // New Contacts Window
-        contacts = new ContactsWindow(model);
+        // New Chat List
+        chatList = new ChatList(model);
 
-        // Create SplitView
-        SplitPane split = new SplitPane();
-        split.getItems().addAll(contacts,  chatInteractionContainer);
-        split.setDividerPositions(0.3f, 0.6f);
+        // Create Split Pane
+        SplitPane splitPane = new SplitPane();
+        splitPane.getItems().addAll(chatList,  chatInteractionContainer);
+        splitPane.setDividerPositions(0.3f, 0.6f);
 
-        // Add Items to Borderpane
+        // Add Items to BorderPane
         root.setTop(mainMenu);
-        root.setCenter(split);
-
+        root.setCenter(splitPane);
 
         // Stage Settings
         Scene scene = new Scene(root, 700, 500);
@@ -56,7 +55,6 @@ public class Main_View {
 
         String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
-
     }
 
     public void start(){
@@ -68,6 +66,6 @@ public class Main_View {
     }
 
     // public void updateChatsDisplayed(Contact selectedContact) {
-    //    chats.displayMessages(selectedContact.getMessages());
+    //    chatWindow.displayMessages(selectedContact.getMessages());
     //}
 }

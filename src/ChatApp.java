@@ -73,11 +73,11 @@ public class ChatApp extends Application {
     }
 
 
-    public void startApp() {
+    public void startApp(String username) {
         Stage appStage = new Stage();
 
         //Create and display main App screen and model
-        Main_Model model = new Main_Model();
+        Main_Model model = new Main_Model(username);
         mainView = new Main_View(appStage, model);
         new Main_Controller(model, mainView);
 

@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import src.mainClasses.Main_Model;
 
 public class InteractionRibbon extends HBox {
 

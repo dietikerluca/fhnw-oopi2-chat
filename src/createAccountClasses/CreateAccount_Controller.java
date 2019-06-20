@@ -22,17 +22,18 @@ public class CreateAccount_Controller extends Controller {
 
         view.confirmButton.setOnAction(event -> {
             logger.fine("Button: Confirm");
-            if (model.createAccount(
-                    view.usernameField.getText(),
-                    view.passwordField.getText())) {
 
+            model.setUsername(view.usernameField.getText());
+            model.setPassword(view.passwordField.getText());
+
+            if (model.createAccount()) {
                 ChoicePopUp success = new ChoicePopUp(
                         tr.getString("CreateAccountView.success"),
                         tr.getString("buttons.yeah"),
                         tr.getString("windows.AccountSuccess"));
 
                 success.secondaryBtn.setOnAction(event1 -> {
-                    main.startApp();
+                    main.startApp(model.getUsername());
                 });
 
             } else {
@@ -42,6 +43,4 @@ public class CreateAccount_Controller extends Controller {
             }
         });
     }
-
-
 }

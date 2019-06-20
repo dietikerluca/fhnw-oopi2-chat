@@ -20,6 +20,7 @@ public class Login_Model extends Model {
         return new Task<Void>() {
             @Override
             protected Void call() {
+                loginSuccessful = false;
                 ChatClient chatClient = ServiceLocator.getServiceLocator().getChatClient();
                 loginSuccessful = chatClient.login(username, password);
 
@@ -55,5 +56,9 @@ public class Login_Model extends Model {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

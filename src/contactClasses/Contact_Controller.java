@@ -40,7 +40,7 @@ public class Contact_Controller {
 //                contact_view.getExisting().setLastname(contact_view.lastName.getText());
 //                contact_view.getExisting().setUsername(contact_view.username.getText());
 //                contact_view.getExisting().setBlocked(contact_view.blocked.isSelected());
-//                view.contacts.updateContactCards(model.getContactList());
+//                view.contacts.updateChatList(model.getContactList());
 //                contact_view.stop();
 //            }
 //        });

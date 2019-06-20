@@ -1,12 +1,12 @@
 package src.mainClasses;
 
-
-import javafx.collections.ListChangeListener;
 import javafx.stage.Stage;
+import javafx.collections.ListChangeListener;
 import src.ServiceLocator;
 import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
 import src.commonViews.ChoicePopUp;
+import src.commonViews.ErrorPopUp;
 import src.loginClasses.Login_Controller;
 import src.loginClasses.Login_Model;
 import src.loginClasses.Login_View;
@@ -16,6 +16,7 @@ import src.preferencesClasses.Preferences_View;
 import src.startChatClasses.StartChat_Controller;
 import src.startChatClasses.StartChat_Model;
 import src.startChatClasses.StartChat_View;
+import src.typeClasses.Chat;
 import src.typeClasses.Message;
 
 import java.awt.*;
@@ -44,40 +45,26 @@ public class Main_Controller {
         this.view = view;
 
         ChatClient chatClient = sl.getChatClient();
+
         chatClient.getIncomingMessages().addListener((ListChangeListener<Message>) c -> {
             while (c.next()) {
-                for (Message m : c.getAddedSubList()) {
-                    logger.info(m.toString());
-                }
+                for (Message m : c.getAddedSubList()) model.receiveMessage(m);
             }
         });
 
-//        //TestMessageGenerator
-//        view.mainMenu.testReceived.setOnAction(event -> {
-//            logger.fine("Button: Test Message Received");
-//            Message msg = new Message("test","testChat","Test Message", true);
-//            view.chats.displayNewMessage(msg);
-//        });
-//
-//        //TestConntactGenerator
-//        view.mainMenu.testContact.setOnAction(event -> {
-//            logger.fine("Button: Test Contact");
-//            Person person = new Person();
-//            view.contacts.displayContact(person);
-//        });
+        view.mainMenu.joinChatRoom.setOnAction(e -> model.joinChatroom("CatChat"));
 
-        //Show Login Window
+        // Show Login Window
         view.mainMenu.login.setOnAction(e -> {
             logger.fine("Button: Login");
             Stage loginStage = new Stage();
             Login_Model login_model = new Login_Model();
             login_view = new Login_View(loginStage, login_model);
-            Login_Controller login_controller = new Login_Controller(login_model, login_view);
-                login_view.start();
-
+            new Login_Controller(login_model, login_view);
+            login_view.start();
         });
 
-        //Show Settings
+        // Show Settings
         view.mainMenu.preferences.setOnAction(e -> {
             logger.fine("Button: Preferences");
             preferences_model = new Preferences_Model();
@@ -88,35 +75,29 @@ public class Main_Controller {
             preferences_view.start();
         });
 
+        // New Message Entered and Sent
+        view.interactionRibbon.sendBtn.setOnAction(event -> {
+            String msg = view.interactionRibbon.messageField.getText();
+            Chat currentChat = model.getCurrentChat();
 
-//        //New Message Entered and Sent
-//        view.interactionRibbon.sendBtn.setOnAction(event -> {
-//            //TODO
-//            String msg = view.interactionRibbon.messageField.getText();
-//            Message message = new Message(msg, false);
-//            if (view.contacts.contactList.getSelectionModel().getSelectedItem() == null){
-//                ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
-//            } else {
-//                view.chats.displayNewMessage(new Message(msg, false));
-//                view.interactionRibbon.messageField.clear();
-//                ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
-//                Contact respectiveContact = contactCard.getContact();
-//                respectiveContact.addMessage(message);
-//            }
-//
-//        });
+            if (currentChat != null) {
+                model.sendMessage(currentChat, msg);
+            } else {
+                ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close"));
+            }
+        });
 
 //        view.interactionRibbon.messageField.setOnKeyPressed(event -> {
 //            //TODO
 //            if ( event.getCode() == KeyCode.ENTER){
 //                String msg = view.interactionRibbon.messageField.getText();
 //                Message message = new Message(msg, false);
-//                if (view.contacts.contactList.getSelectionModel().getSelectedItem() == null){
+//                if (view.contacts.chatList.getSelectionModel().getSelectedItem() == null){
 //                    ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
 //                } else {
-//                    view.chats.displayNewMessage(new Message(msg, false));
+//                    view.chatWindow.displayNewMessage(new Message(msg, false));
 //                    view.interactionRibbon.messageField.clear();
-//                    ContactCard contactCard = (ContactCard) view.contacts.contactList.getSelectionModel().getSelectedItem();
+//                    ChatListElement contactCard = (ChatListElement) view.contacts.chatList.getSelectionModel().getSelectedItem();
 //                    Contact respectiveContact = contactCard.getContact();
 //                    respectiveContact.addMessage(message);
 //                }
@@ -132,16 +113,11 @@ public class Main_Controller {
 //            Contact_View cw = new Contact_View(this.model, this.view);
 //        });
 
-        //If selected Contact changes change messages displayed
-//        view.contacts.contactList.getSelectionModel().selectedItemProperty().addListener(change -> {
-//            try {
-//                logger.fine("New selected Contact: " + view.contacts.getSelectedContact().getPrename() + " " +
-//                        view.contacts.getSelectedContact().getLastname());
-//                view.updateChatsDisplayed(view.contacts.getSelectedContact());
-//            } catch (Exception e){
-//                logger.warning("No Contact found.");
-//            }
-//        });
+        view.chatList.getChatList().getSelectionModel().selectedItemProperty().addListener(change -> {
+            model.setCurrentChat(view.chatList.getSelectedChat());
+            model.getCurrentChat().getMessages().addListener((ListChangeListener<Message>) c -> view.chatWindow.updateChatWindow());
+            view.chatWindow.updateChatWindow();
+        });
 
         /*Help Menu
         * ------------------------------------*/
@@ -185,7 +161,7 @@ public class Main_Controller {
 
         /*Contact Context Menu Request
         * ------------------------------------*/
-//        view.contacts.contactList.setOnContextMenuRequested(request -> {
+//        view.contacts.chatList.setOnContextMenuRequested(request -> {
 //            logger.fine("Context Menu Request discovered");
 //            if (view.contacts.isEmpty()){
 //                logger.info("No Contacts in the list");
@@ -224,11 +200,5 @@ public class Main_Controller {
 //
 //        }
 //        });
-
-
     }
-
-
-
-
 }

@@ -283,38 +283,38 @@ Single Elements only
 }
 
 
-/*Contact Cards (for Mainview contacts)
+/* Chat List elements
 ---------------------------------------*/
 
-.ContactCard {
+.ChatListElement {
     -fx-alignment: Center-left;
     -fx-padding: 10 10 10 15;
     -fx-spacing: 25;
 }
 
-.label.TextContactCard {
+.label.TextChatListElement {
     -fx-font-family: Tahoma;
     -fx-font-size: 12pt;
     -fx-font-weight: bold;
     -fx-text-fill: black;
 }
 
-.label.TextContactCardSecond {
+.label.TextChatListElementSecond {
     -fx-text-fill: #3C3C3C;
 }
 
-.label.TextContactCardBlocked {
+.label.TextChatListElementBlocked {
     -fx-font-family: Tahoma;
     -fx-font-size: 12pt;
     -fx-font-weight: bold;
     -fx-text-fill: #ADADAD;
 }
 
-.label.TextContactCardSecondBlocked {
+.label.TextChatListElementSecondBlocked {
     -fx-text-fill: #ADADAD;
 }
 
-.ContactCardTextContainer {
+.ChatListElementTextContainer {
     -fx-spacing: 3;
 }
 

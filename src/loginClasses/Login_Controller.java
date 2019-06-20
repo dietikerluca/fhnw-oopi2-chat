@@ -42,7 +42,7 @@ public class Login_Controller extends Controller {
         });
 
         view.closeSuccess.setOnAction(event -> {
-            main.startApp();
+            main.startApp(model.getUsername());
         });
     }
 
@@ -52,11 +52,14 @@ public class Login_Controller extends Controller {
         view.confirmButton.setOnAction(event -> {
             logger.fine("Button: Confirm");
             view.getStage().setScene(view.getLoginProcess());
-            model.initialize();
 
+            model.setUsername(view.usernameField.getText());
+            model.setPassword(view.passwordField.getText());
+
+            model.initialize();
             model.getInitializer().stateProperty().addListener(((observable, oldValue, newValue) -> {
                 if (newValue == Worker.State.SUCCEEDED){
-                    if(!model.isLoginSuccessful()) { //TODO
+                    if(model.isLoginSuccessful()) {
                         view.getStage().setScene(view.getLoginSuccessful());
                     } else {
                         view.getStage().setScene(view.getLoginError());
