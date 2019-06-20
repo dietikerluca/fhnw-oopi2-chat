@@ -1,5 +1,6 @@
 package src.mainClasses;
 
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.collections.ListChangeListener;
 import src.ServiceLocator;
@@ -76,35 +77,11 @@ public class Main_Controller {
         });
 
         // New Message Entered and Sent
-        view.interactionRibbon.sendBtn.setOnAction(event -> {
-            String msg = view.interactionRibbon.messageField.getText();
-            Chat currentChat = model.getCurrentChat();
-
-            if (currentChat != null) {
-                model.sendMessage(currentChat, msg);
-            } else {
-                ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close"));
+        view.interactionRibbon.sendBtn.setOnAction(event -> sendMessageAction());
+        view.interactionRibbon.messageField.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) sendMessageAction();
             }
-        });
-
-//        view.interactionRibbon.messageField.setOnKeyPressed(event -> {
-//            //TODO
-//            if ( event.getCode() == KeyCode.ENTER){
-//                String msg = view.interactionRibbon.messageField.getText();
-//                Message message = new Message(msg, false);
-//                if (view.contacts.chatList.getSelectionModel().getSelectedItem() == null){
-//                    ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close")); //TODO
-//                } else {
-//                    view.chatWindow.displayNewMessage(new Message(msg, false));
-//                    view.interactionRibbon.messageField.clear();
-//                    ChatListElement contactCard = (ChatListElement) view.contacts.chatList.getSelectionModel().getSelectedItem();
-//                    Contact respectiveContact = contactCard.getContact();
-//                    respectiveContact.addMessage(message);
-//                }
-//
-//            }
-//            }
-//        );
+        );
 
         // Contact Creation
 //        view.mainMenu.createContact.setOnAction(event -> {
@@ -119,9 +96,7 @@ public class Main_Controller {
             view.chatWindow.updateChatWindow();
         });
 
-        /*Help Menu
-        * ------------------------------------*/
-
+        // Report Error
         view.mainMenu.reportError.setOnAction(event -> {
             logger.finest("User tries to report error.");
 
@@ -137,15 +112,14 @@ public class Main_Controller {
                 try {
                     mailto = new URI("mailto:luca.dietiker@students.fhnw.ch?subject=Error%20Reporting");
                 } catch (URISyntaxException e) {
-                    logger.warning("Mail error: "+e.getStackTrace().toString());
+                    logger.warning("Mail error: " + e.getStackTrace().toString());
                 }
                 try {
                     desktop.mail(mailto);
                 } catch (IOException e) {
-                    logger.warning("Mail error: "+e.getStackTrace().toString());
+                    logger.warning("Mail error: " + e.getStackTrace().toString());
                 }
             } else {
-
                 logger.warning("Mail error Desktop not supported");
             }
         });
@@ -200,5 +174,18 @@ public class Main_Controller {
 //
 //        }
 //        });
+    }
+
+    void sendMessageAction () {
+        String msg = view.interactionRibbon.messageField.getText();
+        view.interactionRibbon.messageField.clear();
+
+        Chat currentChat = model.getCurrentChat();
+
+        if (currentChat != null) {
+            model.sendMessage(currentChat, msg);
+        } else {
+            ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close"));
+        }
     }
 }

@@ -7,51 +7,50 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import src.commonViews.ImageLoader;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 public class MainMenu extends MenuBar {
 
     Menu messenger, file, help;
     MenuItem login, logout, profile, preferences, quit, newChat, newChatRoom, joinChatRoom, createContact
             , updates, guidance, testReceived, testContact, reportError;
-    ImageView chevronView, chevronView1, chevronView2, chevronView3;
 
-    //Translator for Translating
-    Translator t = ServiceLocator.getServiceLocator().getTranslator();
+    Image chevronImage;
+
+    ServiceLocator serviceLocator;
+    Translator t;
+    Logger logger;
 
     public MainMenu(){
+        serviceLocator = ServiceLocator.getServiceLocator();
+        t = serviceLocator.getTranslator();
+        logger = serviceLocator.getLogger();
 
-        /*Read icons
-        * -------------------------------*/
-        /*Load src.assets
-         * ----------------------------------------*/
+        // Load Chevron Icon
         try {
-            String url = System.getProperty("user.dir");
-            url += "/src/assets/img/chevron_down.png";
-            File chevronFile = new File(url);
-            url = chevronFile.toURI().toURL().toString();
-            Image chevronDown = new Image(url);
-            chevronView = new ImageView(chevronDown);
-            chevronView.setFitHeight(20);
-            chevronView.setFitWidth(20);
-            chevronView1 = new ImageView(chevronDown);
-            chevronView1.setFitHeight(20);
-            chevronView1.setFitWidth(20);
-            chevronView2 = new ImageView(chevronDown);
-            chevronView2.setFitHeight(20);
-            chevronView2.setFitWidth(20);
-            chevronView3 = new ImageView(chevronDown);
-            chevronView3.setFitHeight(20);
-            chevronView3.setFitWidth(20);
+            chevronImage = ImageLoader.loadImage("/src/assets/img/chevron_down.png");
         } catch (Exception e){
-            e.printStackTrace();
-
+            logger.warning("image could not be loaded. \n Stack Trace: " + e);
         }
 
-        messenger = new Menu("", chevronView);
-        file = new Menu("", chevronView1);
-        help = new Menu("", chevronView3);
+        ImageView messengerChevron = new ImageView(chevronImage);
+        messengerChevron.setFitHeight(20);
+        messengerChevron.setFitWidth(20);
+
+        ImageView fileChevron = new ImageView(chevronImage);
+        fileChevron.setFitHeight(20);
+        fileChevron.setFitWidth(20);
+
+        ImageView helpChevron = new ImageView(chevronImage);
+        helpChevron.setFitHeight(20);
+        helpChevron.setFitWidth(20);
+
+        messenger = new Menu("", messengerChevron);
+        file = new Menu("", fileChevron);
+        help = new Menu("", helpChevron);
 
         login = new MenuItem(t.getString("mainmenu.Login"));
         logout = new MenuItem(t.getString("mainmenu.Logout"));

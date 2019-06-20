@@ -9,13 +9,9 @@ public class StartChat_Controller extends Controller {
         super(model, view);
 
         view.startChat.setOnAction(event -> {
-
             //TODO Send message to User
 
             //TODO Error message if user doesent exists
         });
-
-
     }
-
 }

@@ -36,7 +36,6 @@ public class Login_Controller extends Controller {
             }));
         });
 
-
         view.closeTryAgain.setOnAction(event -> {
             view.getStage().setScene(view.getScene());
         });

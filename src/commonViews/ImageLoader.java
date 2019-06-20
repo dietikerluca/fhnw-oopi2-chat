@@ -7,6 +7,14 @@ import java.io.File;
 import java.net.MalformedURLException;
 
 public class ImageLoader {
+    public static Image loadImage(String path) throws MalformedURLException {
+        String url = System.getProperty("user.dir") + path;
+        File imageFile = new File(url);
+        Image serverImage = new Image(imageFile.toURI().toURL().toString());
+
+        return serverImage;
+    }
+
     public static ImageView loadImageView(String path, int width, int height, String cssClass) throws MalformedURLException {
         String url = System.getProperty("user.dir") + path;
         File imageFile = new File(url);
