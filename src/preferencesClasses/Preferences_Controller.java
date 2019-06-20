@@ -3,6 +3,7 @@ package src.preferencesClasses;
 import src.ServiceLocator;
 import src.abstractClasses.Controller;
 import src.commonClasses.Translator;
+import src.commonViews.ChoicePopUp;
 import src.commonViews.ErrorPopUp;
 import src.mainClasses.Main_View;
 
@@ -63,12 +64,12 @@ public class Preferences_Controller extends Controller {
 
         //Listeners for incorrect value entries
         view.portField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 2){
+            if (Integer.parseInt(newValue) > 65535){
                 view.portField.getStyleClass().add("invalid");
-                logger.info("Port number longer than 2");
+                logger.info("Port number too long");
             } else {
                 view.portField.getStyleClass().remove("invalid");
-                logger.fine("Port number shorter than 2");
+                logger.fine("Port number too long");
             }
         });
 
@@ -116,24 +117,25 @@ public class Preferences_Controller extends Controller {
         });
 
         //Register for closing events
-//        view.getStage().setOnCloseRequest(event -> {
-//            if (view.ipAddressField.getText().equals("") == false || view.portField.getText().equals("") == false){
-//                logger.fine("User tries to close window, but there are unsaved changes.");
-//                ChoicePopUp choicePopup = new ChoicePopUp(tr.getString("ErrorMessages.closeRequest"),
-//                        tr.getString("buttons.back"), tr.getString("buttons.closeAnyway"),
-//                        tr.getString("windows.closeRequest"));
-//                event.consume();
-//                choicePopup.secondaryBtn.setOnAction(click -> {
-//                    view.stop();
-//                    choicePopup.popUpStage.hide();
-//                    logger.fine("Button: Close");
-//                });
-//                choicePopup.primaryBtn.setOnAction(click -> {
-//                    choicePopup.popUpStage.hide();
-//                    logger.fine("Button: Back");
-//                });
-//            }
-//        });
+        view.getStage().setOnCloseRequest(event -> {
+            if ((view.ipAddressField.getText().equals("") == false || view.portField.getText().equals("") == false) &&
+            view.buttonPressed == false){
+                logger.info("User tries to close window, but there are unsaved changes.");
+                ChoicePopUp choicePopup = new ChoicePopUp(tr.getString("ErrorMessages.closeRequest"),
+                        tr.getString("buttons.back"), tr.getString("buttons.closeAnyway"),
+                        tr.getString("windows.closeRequest"));
+                event.consume();
+                choicePopup.secondaryBtn.setOnAction(click -> {
+                    view.stop();
+                    choicePopup.popUpStage.hide();
+                    logger.fine("Button: Close");
+                });
+                choicePopup.primaryBtn.setOnAction(click -> {
+                    choicePopup.popUpStage.hide();
+                    logger.fine("Button: Back");
+                });
+            }
+        });
 
     }
 

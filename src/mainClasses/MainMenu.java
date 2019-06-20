@@ -1,21 +1,20 @@
 package src.mainClasses;
 
-import src.ServiceLocator;
-import src.commonClasses.Translator;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import src.ServiceLocator;
+import src.commonClasses.Translator;
 import src.commonViews.ImageLoader;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 public class MainMenu extends MenuBar {
 
     Menu messenger, file, help;
-    MenuItem login, logout, profile, preferences, quit, newChat, newChatRoom, joinChatRoom, createContact
+    MenuItem login, logout, changePassword, deleteAccount, preferences, quit, newChat, newChatRoom, joinChatRoom, createContact
             , updates, guidance, testReceived, testContact, reportError;
 
     Image chevronImage;
@@ -54,13 +53,14 @@ public class MainMenu extends MenuBar {
 
         login = new MenuItem(t.getString("mainmenu.Login"));
         logout = new MenuItem(t.getString("mainmenu.Logout"));
-        profile = new MenuItem(t.getString("mainmenu.Profile"));
+        changePassword = new MenuItem(t.getString("mainmenu.changePassword"));
+        deleteAccount = new MenuItem(t.getString("mainmenu.deleteAccount"));
         preferences = new MenuItem(t.getString("mainmenu.Preferences"));
         quit = new MenuItem(t.getString("mainmenu.Quit"));
         testReceived = new MenuItem("GenerateTestMessageReceived");
         testContact = new MenuItem("Generate Test Contact");
 
-        messenger.getItems().addAll(login, logout, profile, preferences, quit);
+        messenger.getItems().addAll(login, logout, changePassword, deleteAccount, preferences, quit);
 
         newChat = new MenuItem(t.getString("mainmenu.newChat"));
         newChatRoom = new MenuItem(t.getString("mainmenu.newChatRoom"));
@@ -93,7 +93,8 @@ public class MainMenu extends MenuBar {
 
         login.setText(t.getString("mainmenu.Login"));
         logout.setText(t.getString("mainmenu.Logout"));
-        profile.setText(t.getString("mainmenu.Profile"));
+        changePassword.setText(t.getString("mainmenu.changePassword"));
+        deleteAccount.setText(t.getString("mainmenu.deleteAccount"));
         preferences.setText(t.getString("mainmenu.Preferences"));
         quit.setText(t.getString("mainmenu.Quit"));
         testReceived.setText("GenerateTestMessageReceived");

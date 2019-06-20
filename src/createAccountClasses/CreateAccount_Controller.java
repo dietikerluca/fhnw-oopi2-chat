@@ -27,6 +27,7 @@ public class CreateAccount_Controller extends Controller {
             model.setPassword(view.passwordField.getText());
 
             if (model.createAccount()) {
+                logger.fine("Account successfully created.");
                 ChoicePopUp success = new ChoicePopUp(
                         tr.getString("CreateAccountView.success"),
                         tr.getString("buttons.yeah"),
@@ -39,6 +40,7 @@ public class CreateAccount_Controller extends Controller {
 
             } else {
                 new ErrorPopUp(tr.getString("ErrorMessages.accountCreation"), tr.getString("buttons.tryAgain"));
+                logger.warning("Account could not be created.");
             }
         });
     }

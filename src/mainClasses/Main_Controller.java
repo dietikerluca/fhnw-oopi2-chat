@@ -1,9 +1,12 @@
 package src.mainClasses;
 
+import javafx.collections.ListChangeListener;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import javafx.collections.ListChangeListener;
 import src.ServiceLocator;
+import src.accountClasses.ChangePassword_Controller;
+import src.accountClasses.ChangePassword_Model;
+import src.accountClasses.ChangePassword_View;
 import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
 import src.commonViews.ChatroomsList;
@@ -79,6 +82,33 @@ public class Main_Controller {
             login_view = new Login_View(loginStage, login_model);
             new Login_Controller(login_model, login_view);
             login_view.start();
+        });
+
+        // Change Password
+        view.mainMenu.changePassword.setOnAction(event -> {
+            Stage passwordStage = new Stage();
+            ChangePassword_Model changePassword_model = new ChangePassword_Model();
+            ChangePassword_View changePassword_view = new ChangePassword_View(passwordStage, changePassword_model);
+            ChangePassword_Controller changePassword_controller = new ChangePassword_Controller(changePassword_model,
+                    changePassword_view);
+            changePassword_view.start();
+        });
+
+        // Delete Account
+        view.mainMenu.deleteAccount.setOnAction(event -> {
+            ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.deleteAccount"),
+                    tr.getString("buttons.delete"), tr.getString("buttons.back"),
+                    tr.getString("windows.deleteAccount"), true);
+            choicePopUp.primaryBtn.setOnAction(deleteEvent -> {
+                //TODO Delete Account
+                logger.fine("Userchoice: Delete Account - Request sent");
+                ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.accountDeleted"),
+                        tr.getString("buttons.close"), tr.getString("windows.accountDeleted"));
+                choicePopUp.stop();
+            });
+            choicePopUp.secondaryBtn.setOnAction(cancelEvent -> {
+                logger.fine("Usechoice: Stop deleting Account");
+            });
         });
 
         // Show Settings

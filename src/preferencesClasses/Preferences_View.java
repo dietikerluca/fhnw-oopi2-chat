@@ -1,8 +1,5 @@
 package src.preferencesClasses;
 
-import src.ServiceLocator;
-import src.abstractClasses.View;
-import src.commonClasses.Translator;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import src.ServiceLocator;
+import src.abstractClasses.View;
+import src.commonClasses.Translator;
 import src.mainClasses.Main_Model;
 
 import java.io.File;
@@ -78,7 +78,7 @@ public class Preferences_View extends View {
         ipAddressField = new TextField(tr.getString("preferences.ipAddressField"));
         portLbl = new Label(tr.getString("preferences.portLbl"));
         portField = new TextField(tr.getString("preferences.portField"));
-        portField.setMaxWidth(40);
+        portField.setMaxWidth(150);
 
         //Set Prompt Texts
         ipAddressField.setPromptText(sl.getIpAddressPreset());
@@ -117,7 +117,7 @@ public class Preferences_View extends View {
 
         //Create Scene
         Scene scene = new Scene(root, 450, 450);
-        String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+        String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
 
         return scene;
