@@ -8,6 +8,9 @@ import src.abstractClasses.Controller;
 import src.createAccountClasses.CreateAccount_Controller;
 import src.createAccountClasses.CreateAccount_Model;
 import src.createAccountClasses.CreateAccount_View;
+import src.serverChangeClasses.ServerChange_Controller;
+import src.serverChangeClasses.ServerChange_Model;
+import src.serverChangeClasses.ServerChange_View;
 
 public class Splash_Controller extends Controller {
 
@@ -28,13 +31,19 @@ public class Splash_Controller extends Controller {
         view.createAccount.setOnAction(event -> {
             CreateAccount_Model createAccount_model = new CreateAccount_Model();
             CreateAccount_View createAccount_view = new CreateAccount_View(new Stage(), createAccount_model);
-            CreateAccount_Controller createAccount_controller = new CreateAccount_Controller(main, createAccount_model, createAccount_view);
+            CreateAccount_Controller createAccount_controller = new CreateAccount_Controller(main,
+                    createAccount_model, createAccount_view);
 
             createAccount_view.start();
         });
 
         view.changeServer.setOnAction(event -> {
-            //TODO Change Server
+            Stage serverChangeStage = new Stage();
+            ServerChange_Model serverChange_model = new ServerChange_Model();
+            ServerChange_View serverChange_view = new ServerChange_View(serverChangeStage, serverChange_model);
+            ServerChange_Controller serverChange_controller = new ServerChange_Controller(
+                    serverChange_model, serverChange_view);
+            serverChange_view.start();
         });
     }
 }

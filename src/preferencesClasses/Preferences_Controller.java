@@ -94,10 +94,6 @@ public class Preferences_Controller extends Controller {
                     !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 11)))){
                 view.ipAddressField.setText(view.ipAddressField.getText().concat("."));
                 logger.finest("IP length: "+newValue.length());
-            } else if (newValue.length() == 15 && !newValue.endsWith(".") &&
-                    !(oldValue.endsWith(".") && newValue.equals(oldValue.substring(0, 15)))){
-                view.ipAddressField.setText(view.ipAddressField.getText().concat("."));
-                logger.finest("IP length: "+newValue.length());
             }
         });
 

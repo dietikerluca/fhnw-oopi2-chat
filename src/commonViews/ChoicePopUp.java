@@ -17,15 +17,17 @@ import java.util.logging.Logger;
 
 public class ChoicePopUp {
 
-    Stage popUpStage;
+    public Stage popUpStage;
     public Button primaryBtn, secondaryBtn;
-    ServiceLocator sl = ServiceLocator.getServiceLocator();
-    Logger logger = sl.getLogger();
+    private Logger logger;
+
 
     public ChoicePopUp(String popUpMessageString, String buttonPrimary, String buttonMessageSecondary, String window){
         popUpStage = new Stage();
         popUpStage.initStyle(StageStyle.UNDECORATED);
         VBox vbox = new VBox();
+        ServiceLocator sl = ServiceLocator.getServiceLocator();
+        logger = sl.getLogger();
 
         /*Load src.assets
          * ----------------------------------------*/
@@ -58,7 +60,7 @@ public class ChoicePopUp {
         vbox.setSpacing(30);
         vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox,400,250);
-        String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+        String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
         popUpStage.setScene(scene);
         popUpStage.setTitle(window);
