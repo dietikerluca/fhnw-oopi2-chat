@@ -35,7 +35,6 @@ public class CreateAccount_View extends View {
 
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setAlwaysOnTop(true);
-        stage.setTitle(tr.getString("windows.ceateAccount"));
 
         stage.setScene(create_GUI());
     }
@@ -47,10 +46,11 @@ public class CreateAccount_View extends View {
         logger = sl.getLogger();
 
         StackPane root = new StackPane();
+        root.getStyleClass().add("windowPopUp");
         VBox vbox = new VBox();
 
         // Create Scene
-        scene = new Scene(root, 250, 400);
+        scene = new Scene(root, 300, 400);
 
         // Create Fields
         header = new Label(tr.getString("header.createAccount"));
@@ -63,10 +63,10 @@ public class CreateAccount_View extends View {
         pwLabel.getStyleClass().add("defaultLabel");
 
         usernameField = new TextField();
-        usernameField.setMaxWidth(150);
+        usernameField.setMaxWidth(200);
 
         passwordField = new PasswordField();
-        passwordField.setMaxWidth(150);
+        passwordField.setMaxWidth(200);
 
         confirmButton = new Button(tr.getString("LoginView.confirmBtn"));
         confirmButton.getStyleClass().add("confirm");

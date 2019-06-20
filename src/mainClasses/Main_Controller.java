@@ -1,26 +1,22 @@
 package src.mainClasses;
 
 
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
-import src.Main.ContactCard;
 import javafx.collections.ListChangeListener;
-import src.Main.*;
+import javafx.stage.Stage;
 import src.ServiceLocator;
 import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
 import src.commonViews.ChoicePopUp;
-import src.commonViews.ErrorPopUp;
-import src.contactClasses.Contact_Controller;
-import src.contactClasses.Contact_View;
 import src.loginClasses.Login_Controller;
 import src.loginClasses.Login_Model;
 import src.loginClasses.Login_View;
 import src.preferencesClasses.Preferences_Controller;
 import src.preferencesClasses.Preferences_Model;
 import src.preferencesClasses.Preferences_View;
+import src.startChatClasses.StartChat_Controller;
+import src.startChatClasses.StartChat_Model;
+import src.startChatClasses.StartChat_View;
 import src.typeClasses.Message;
-import src.typeClasses.Person;
 
 import java.awt.*;
 import java.io.IOException;
@@ -176,6 +172,14 @@ public class Main_Controller {
 
                 logger.warning("Mail error Desktop not supported");
             }
+        });
+
+        view.mainMenu.newChat.setOnAction(event -> {
+            Stage startChat_Stage = new Stage();
+            StartChat_Model startChat_model = new StartChat_Model();
+            StartChat_View startChat_view = new StartChat_View(startChat_Stage, startChat_model);
+            StartChat_Controller startChat_controller = new StartChat_Controller(startChat_model, startChat_view);
+            startChat_view.start();
         });
 
 

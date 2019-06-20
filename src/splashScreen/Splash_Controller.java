@@ -32,5 +32,9 @@ public class Splash_Controller extends Controller {
 
             createAccount_view.start();
         });
+
+        view.changeServer.setOnAction(event -> {
+            //TODO Change Server
+        });
     }
 }

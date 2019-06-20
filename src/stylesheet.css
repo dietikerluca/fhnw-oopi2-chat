@@ -485,4 +485,16 @@ Single Elements only
     -fx-background-color: #F4F4F4;
 }
 
+/* Hyperlinks
+---------------------------------*/
+.hyperlink {
+    -fx-font-family: Tahoma;
+    -fx-text-fill:  #1781E3;
+    -fx-font-style: italic;
+}
+
+.hyperlink:hover {
+    -fx-text-fill:  #0851DA;
+}
+
 

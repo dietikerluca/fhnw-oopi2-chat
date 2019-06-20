@@ -19,6 +19,8 @@ public class ErrorPopUp {
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
     public ErrorPopUp(String errorMessageString, String buttonMessage){
+        ServiceLocator sl = ServiceLocator.getServiceLocator();
+
         errorStage = new Stage();
         Stage errorStage = new Stage();
         VBox vbox = new VBox();
@@ -47,7 +49,7 @@ public class ErrorPopUp {
         vbox.setSpacing(30);
         vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox,250,300);
-        String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+        String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
         errorStage.setScene(scene);
         errorStage.setTitle("Error occurred");

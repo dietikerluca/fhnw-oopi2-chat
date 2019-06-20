@@ -1,11 +1,9 @@
 package src.loginClasses;
 
+import javafx.concurrent.Task;
 import src.ServiceLocator;
 import src.abstractClasses.Model;
-import javafx.concurrent.Task;
 import src.commonClasses.ChatClient;
-
-import java.util.concurrent.TimeUnit;
 
 public class Login_Model extends Model {
 
@@ -19,7 +17,7 @@ public class Login_Model extends Model {
     }
 
     private Task<Void> createInitializer() {
-        return new Task<>() {
+        return new Task<Void>() {
             @Override
             protected Void call() {
                 ChatClient chatClient = ServiceLocator.getServiceLocator().getChatClient();
