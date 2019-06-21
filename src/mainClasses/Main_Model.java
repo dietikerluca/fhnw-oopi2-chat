@@ -3,10 +3,11 @@ package src.mainClasses;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import src.ServiceLocator;
+import src.abstractClasses.Model;
 import src.commonClasses.Translator;
 import src.typeClasses.*;
 
-public class Main_Model {
+public class Main_Model extends Model {
     ServiceLocator sl;
     Translator tr;
     String username;
@@ -53,8 +54,21 @@ public class Main_Model {
                 }
             }
 
+            // It's a new private Chat
             if (!chatFound) {
-                
+                Person sender = null;
+                // Try to find an existing person
+                for (Person p : persons) {
+                    if (p.getUsername().equals(m.getUsername())) sender = p;
+                }
+                if (sender == null) {
+                    sender = new Person(m.getUsername());
+                    persons.add(sender);
+                }
+
+                PrivateChat newChat = new PrivateChat(sender, username);
+                chats.add(newChat);
+                newChat.addMessage(m);
             }
         }
 
@@ -103,5 +117,17 @@ public class Main_Model {
 
     public void setCurrentChat(Chat currentChat) {
         this.currentChat = currentChat;
+    }
+
+    public void createPrivateChat(String name) {
+        Person person = null;
+        // Try to find an existing person
+        for (Person p : persons) {
+            if (p.getUsername().equals(name)) person = p;
+        }
+        if (person == null) person = new Person(name);
+
+        PrivateChat newChat = new PrivateChat(person, person.getUsername());
+        chats.add(newChat);
     }
 }

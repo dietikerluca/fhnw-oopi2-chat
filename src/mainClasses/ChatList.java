@@ -1,5 +1,6 @@
 package src.mainClasses;
 
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -54,13 +55,13 @@ public class ChatList extends ScrollPane {
     }
 
     public void updateChatList(){
-        chatList.getItems().clear();
+        Platform.runLater(() -> chatList.getItems().clear());
         logger.fine("Contact list cleared");
         logger.fine("Re-creating contact list.");
 
         for (Chat c : model.getChats()){
             logger.finest("Adding List element for Chat: " + c.getName());
-            chatList.getItems().add(new ChatListElement(c));
+            Platform.runLater(() -> chatList.getItems().add(new ChatListElement(c)));
         }
         logger.fine("Update finished.");
     }

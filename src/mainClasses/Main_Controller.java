@@ -64,6 +64,7 @@ public class Main_Controller {
             }
         });
 
+        // Join a Chatroom
         view.mainMenu.joinChatRoom.setOnAction(e -> {
             ChatroomsList chatroomsList = new ChatroomsList();
 
@@ -122,7 +123,7 @@ public class Main_Controller {
             preferences_view.start();
         });
 
-        // New Message Entered and Sent
+        // Send message
         view.interactionRibbon.sendBtn.setOnAction(event -> sendMessageAction());
         view.interactionRibbon.messageField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) sendMessageAction();
@@ -165,9 +166,8 @@ public class Main_Controller {
 
         view.mainMenu.newChat.setOnAction(event -> {
             Stage startChat_Stage = new Stage();
-            StartChat_Model startChat_model = new StartChat_Model();
-            StartChat_View startChat_view = new StartChat_View(startChat_Stage, startChat_model);
-            StartChat_Controller startChat_controller = new StartChat_Controller(startChat_model, startChat_view);
+            StartChat_View startChat_view = new StartChat_View(startChat_Stage, model);
+            new StartChat_Controller(model, startChat_view);
             startChat_view.start();
         });
 
@@ -210,7 +210,7 @@ public class Main_Controller {
         if (currentChat != null) {
             model.sendMessage(currentChat, msg);
         } else {
-            ErrorPopUp errorPopUp = new ErrorPopUp("Please select a contact first.", tr.getString("buttons.close"));
+            ErrorPopUp errorPopUp = new ErrorPopUp("Please select a chat first.", tr.getString("buttons.close"));
         }
     }
 }

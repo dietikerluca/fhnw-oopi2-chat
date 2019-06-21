@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import src.ServiceLocator;
 import src.abstractClasses.View;
 import src.commonClasses.Translator;
+import src.mainClasses.Main_Model;
 
 import java.util.logging.Logger;
 
@@ -18,7 +19,7 @@ public class StartChat_View extends View {
     Button startChat;
 
 
-    public StartChat_View(Stage stage, StartChat_Model model) {
+    public StartChat_View(Stage stage, Main_Model model) {
         super(stage, model);
 
         Translator tr = ServiceLocator.getServiceLocator().getTranslator();

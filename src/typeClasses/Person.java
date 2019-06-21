@@ -3,7 +3,6 @@ package src.typeClasses;
 import java.util.Date;
 
 public class Person {
-    private PrivateChat chat;
     private Date lastMessageReceived;
 
     private String username;
@@ -15,11 +14,10 @@ public class Person {
     public Person(String username) {
         this.username = username;
 
-        this.chat = new PrivateChat(this);
-    }
-
-    public PrivateChat getChat() {
-        return chat;
+        this.firstname = "";
+        this.lastname = "";
+        this.inContactList = false;
+        this.blocked = false;
     }
 
     public Date getLastMessageReceived() {

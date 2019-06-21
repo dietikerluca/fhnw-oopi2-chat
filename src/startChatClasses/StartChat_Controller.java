@@ -4,13 +4,14 @@ import src.ServiceLocator;
 import src.abstractClasses.Controller;
 import src.commonClasses.Translator;
 import src.commonViews.ErrorPopUp;
+import src.mainClasses.Main_Model;
 
 import java.util.logging.Logger;
 
 public class StartChat_Controller extends Controller {
 
 
-    public StartChat_Controller(StartChat_Model model, StartChat_View view) {
+    public StartChat_Controller(Main_Model model, StartChat_View view) {
         super(model, view);
 
         view.startChat.setOnAction(event -> {
@@ -22,11 +23,9 @@ public class StartChat_Controller extends Controller {
                 ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.noUsernameEntered"),
                         tr.getString("windows.missingUsername"));
                 logger.warning("No Username entered.");
+            } else {
+                model.createPrivateChat(view.sendTo.getText());
             }
-
-            //TODO Send message to User
-
-            //TODO Error message if user doesent exists
         });
     }
 }
