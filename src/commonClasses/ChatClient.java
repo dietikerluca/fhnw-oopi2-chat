@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
 public class ChatClient {
     private String hostAddress;
@@ -25,6 +26,7 @@ public class ChatClient {
     private String token;
 
     private ServiceLocator sl;
+    private Logger logger;
 
     public ChatClient(String hostAddress, int hostPort) {
         this.hostAddress = hostAddress;
@@ -32,6 +34,7 @@ public class ChatClient {
 
         incomingMessages = FXCollections.observableArrayList();
         sl = ServiceLocator.getServiceLocator();
+        logger = sl.getLogger();
     }
 
     public boolean connect() {
@@ -78,33 +81,52 @@ public class ChatClient {
                 Thread t = new Thread(incomingListener);
                 t.start();
 
-                return true;
+                return ping().parseReturnValue()[1].equals("true");
             } catch (Exception e) {
-                e.printStackTrace();
-
                 return false;
             }
         }
         return true;
     }
 
-    private ChatCommand sendCommand(String commandString) {
-        ChatCommand command = new ChatCommand(commandString, socketOut);
+    public void disconnect() {
         try {
-            commandQueue.put(command);
-            command.execute();
-        } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
+            if (socket != null) {
+                socketOut.close();
+                socketIn.close();
+                socket.close();
+                socket = null;
+            }
+        } catch (IOException e) {
+            // We don't care anymore
         }
-
-        System.out.println(command);
-        while (!command.isFinished()) {
-            Thread.yield();
-        }
-        return command;
     }
 
-    public ChatCommand ping() {
+    private ChatCommand sendCommand(String commandString) throws IOException{
+        if (isConnected()) {
+            ChatCommand command = new ChatCommand(commandString, socketOut);
+            try {
+                commandQueue.put(command);
+                command.execute();
+            } catch (InterruptedException | IOException e) {
+                throw new IOException("Unable to send command");
+            }
+
+            System.out.println(command);
+            while (!command.isFinished() && !command.isTimeout()) {
+                Thread.yield();
+            }
+            if (!command.isTimeout()) {
+                return command;
+            } else {
+                throw new IOException("Socket timeout");
+            }
+        } else {
+            throw new IOException("Not connected to server");
+        }
+    }
+
+    public ChatCommand ping() throws IOException {
         if (token != null) {
             return sendCommand("Ping|" + token);
         } else {
@@ -112,12 +134,12 @@ public class ChatClient {
         }
     }
 
-    public boolean createLogin(String username, String password) {
+    public boolean createLogin(String username, String password) throws IOException {
         String[] response = sendCommand("CreateLogin|" + username + "|" + password).parseReturnValue();
         return response[1].equals("true");
     }
 
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws IOException {
         String[] response = sendCommand("Login|" + username + "|" + password).parseReturnValue();
 
         if (response[1].equals("true")) {
@@ -128,7 +150,7 @@ public class ChatClient {
         }
     }
 
-    public boolean changePassword(String newPassword) {
+    public boolean changePassword(String newPassword) throws IOException {
         String[] response = sendCommand("ChangePassword|"+ token + "|" + newPassword).parseReturnValue();
 
         if (response[1].equals("true")) {
@@ -138,7 +160,7 @@ public class ChatClient {
         }
     }
 
-    public boolean deleteAccount() {
+    public boolean deleteAccount() throws IOException {
         String[] response = sendCommand("DeleteLogin|"+ token).parseReturnValue();
 
         if (response[1].equals("true")) {
@@ -148,14 +170,14 @@ public class ChatClient {
         }
     }
 
-    public boolean logout() {
+    public boolean logout() throws IOException {
         if (token != null) {
             sendCommand("Logout");
         }
         return true;
     }
 
-    public boolean createChatroom(String name, boolean isPublic) {
+    public boolean createChatroom(String name, boolean isPublic) throws IOException {
         if (token != null) {
             String[] response = sendCommand("CreateChatroom|" + token + "|" + name + "|" + isPublic).parseReturnValue();
             return response[1].equals("true");
@@ -163,7 +185,7 @@ public class ChatClient {
         return false;
     }
 
-    public boolean joinChatroom(String chatroom, String user) {
+    public boolean joinChatroom(String chatroom, String user) throws IOException {
         if (token != null) {
             String[] response = sendCommand("JoinChatroom|" + token + "|" + chatroom + "|" + user).parseReturnValue();
             return response[1].equals("true");
@@ -171,7 +193,7 @@ public class ChatClient {
         return false;
     }
 
-    public boolean leaveChatroom(String chatroom, String user) {
+    public boolean leaveChatroom(String chatroom, String user) throws IOException {
         if (token != null) {
             String[] response = sendCommand("LeaveChatroom|" + token + "|" + chatroom + "|" + user).parseReturnValue();
             return response[1].equals("true");
@@ -179,7 +201,7 @@ public class ChatClient {
         return false;
     }
 
-    public boolean deleteChatroom(String chatroom) {
+    public boolean deleteChatroom(String chatroom) throws IOException {
         if (token != null) {
             String[] response = sendCommand("DeleteChatroom|" + token + "|" + chatroom).parseReturnValue();
             return response[1].equals("true");
@@ -187,7 +209,7 @@ public class ChatClient {
         return false;
     }
 
-    public String[] listChatrooms() {
+    public String[] listChatrooms() throws IOException {
         if (token != null) {
             String[] response = sendCommand("ListChatrooms|" + token).parseReturnValue();
             if (response[1].equals("true")) {
@@ -199,7 +221,7 @@ public class ChatClient {
         return null;
     }
 
-    public boolean sendMessage(String target, String message) {
+    public boolean sendMessage(String target, String message) throws IOException {
         if (token != null) {
             String[] response = sendCommand("SendMessage|" + token + "|" + target + "|" + message).parseReturnValue();
             return response[1].equals("true");

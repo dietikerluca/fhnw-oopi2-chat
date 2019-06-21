@@ -76,14 +76,13 @@ public class ChatApp extends Application {
     public void startApp(String username) {
         Stage appStage = new Stage();
 
-        //Create and display main App screen and model
+        // Create and display main App screen and model
         Main_Model model = new Main_Model(username);
         mainView = new Main_View(appStage, model);
         new Main_Controller(model, mainView);
 
-        // Close the splash screen, and set the reference to null, so that all
-        // Splash_XXX objects can be garbage collected
-        if (loginView != null){
+        // Close all other windows
+        if (loginView != null) {
             loginView.stop();
             loginView = null;
         }
@@ -98,4 +97,5 @@ public class ChatApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }

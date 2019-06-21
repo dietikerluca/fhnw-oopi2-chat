@@ -1,5 +1,7 @@
 package src.mainClasses;
 
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -57,7 +59,12 @@ public class Main_Controller {
         logger = sl.getLogger();
         chatClient = sl.getChatClient();
 
-        // Listen for incoming messages
+        view.getStage().setOnCloseRequest(e -> {
+            chatClient.disconnect();
+            view.stop();
+        });
+
+            // Listen for incoming messages
         chatClient.getIncomingMessages().addListener((ListChangeListener<Message>) c -> {
             while (c.next()) {
                 for (Message m : c.getAddedSubList()) model.receiveMessage(m);
@@ -91,15 +98,21 @@ public class Main_Controller {
                     tr.getString("buttons.logout"), tr.getString("buttons.back"),
                     tr.getString("windows.logout"), true);
             choicePopUp.primaryBtn.setOnAction(deleteEvent -> {
-                chatClient.logout();
-                choicePopUp.stop();
-                logger.fine("Userchoice: Logout - Request sent");
-                ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.loggedOut"),
-                        tr.getString("buttons.close"), tr.getString("windows.loggedOut"));
-                deleted.secondaryBtn.setOnAction(close -> {
-                    view.stop();
-                    deleted.stop();
-                });
+                try {
+                    chatClient.logout();
+                    choicePopUp.stop();
+                    logger.fine("Userchoice: Logout - Request sent");
+                    ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.loggedOut"),
+                            tr.getString("buttons.close"), tr.getString("windows.loggedOut"));
+                    deleted.secondaryBtn.setOnAction(close -> {
+                        view.stop();
+                        deleted.stop();
+                    });
+                } catch (IOException e) {
+                    ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
+                            tr.getString("buttons.close"));
+                    choicePopUp.stop();
+                }
             });
             choicePopUp.secondaryBtn.setOnAction(cancelEvent -> {
                 logger.fine("Usechoice: Stop logging out");
@@ -122,11 +135,17 @@ public class Main_Controller {
                     tr.getString("buttons.delete"), tr.getString("buttons.back"),
                     tr.getString("windows.deleteAccount"), true);
             choicePopUp.primaryBtn.setOnAction(deleteEvent -> {
-                chatClient.deleteAccount();
-                logger.fine("Userchoice: Delete Account - Request sent");
-                ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.accountDeleted"),
-                        tr.getString("buttons.close"), tr.getString("windows.accountDeleted"));
-                choicePopUp.stop();
+                try {
+                    chatClient.deleteAccount();
+                    logger.fine("Userchoice: Delete Account - Request sent");
+                    ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.accountDeleted"),
+                            tr.getString("buttons.close"), tr.getString("windows.accountDeleted"));
+                    choicePopUp.stop();
+                } catch (IOException e) {
+                    ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
+                            tr.getString("buttons.close"));
+                    choicePopUp.stop();
+                }
             });
             choicePopUp.secondaryBtn.setOnAction(cancelEvent -> {
                 logger.fine("Usechoice: Stop deleting Account");

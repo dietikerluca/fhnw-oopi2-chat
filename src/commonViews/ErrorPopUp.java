@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class ErrorPopUp {
 
     Stage errorStage;
+    public Button closeBtn;
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
     public ErrorPopUp(String errorMessageString, String buttonMessage){
@@ -43,7 +44,7 @@ public class ErrorPopUp {
         }
         Label errorMessage = new Label(errorMessageString);
         errorMessage.getStyleClass().add("errorMessage");
-        Button closeBtn = new Button(buttonMessage);
+        closeBtn = new Button(buttonMessage);
         closeBtn.getStyleClass().add("close");
         vbox.getChildren().addAll(errorMessage, closeBtn);
         vbox.setSpacing(30);
@@ -64,5 +65,9 @@ public class ErrorPopUp {
             errorStage.close();
             logger.finest("User closed window.");
         });
+    }
+
+    public void close() {
+        errorStage.close();
     }
 }

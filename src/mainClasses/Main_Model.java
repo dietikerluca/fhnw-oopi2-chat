@@ -5,7 +5,10 @@ import javafx.collections.ObservableList;
 import src.ServiceLocator;
 import src.abstractClasses.Model;
 import src.commonClasses.Translator;
+import src.commonViews.ErrorPopUp;
 import src.typeClasses.*;
+
+import java.io.IOException;
 
 public class Main_Model extends Model {
     ServiceLocator sl;
@@ -31,17 +34,27 @@ public class Main_Model extends Model {
 
         // Only join the chatroom if it doesn't already exist
         if (chatroom == null) {
-            Chatroom newChatroom = new Chatroom(name);
-            chats.add(newChatroom);
-            sl.getChatClient().joinChatroom(newChatroom.getName(), username);
+            try {
+                Chatroom newChatroom = new Chatroom(name);
+                chats.add(newChatroom);
+                sl.getChatClient().joinChatroom(newChatroom.getName(), username);
+            } catch (IOException e) {
+                ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
+                        tr.getString("buttons.close"));
+            }
         }
     }
 
     public void sendMessage(Chat target, String msg) {
-        Message message = new Message("brad", target.getName(), msg, false);
-        target.addMessage(message);
+        try {
+            Message message = new Message("brad", target.getName(), msg, false);
+            target.addMessage(message);
 
-        sl.getChatClient().sendMessage(message.getTarget(), message.getMessage());
+            sl.getChatClient().sendMessage(message.getTarget(), message.getMessage());
+        } catch (IOException e) {
+            ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
+                    tr.getString("buttons.close"));
+        }
     }
 
     public void receiveMessage(Message m) {

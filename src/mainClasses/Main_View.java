@@ -5,10 +5,9 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import src.ServiceLocator;
+import src.abstractClasses.View;
 
-public class Main_View {
-    Stage stage;
-    Main_Model model;
+public class Main_View extends View<Main_Model> {
     ChatWindow chatWindow;
     MainMenu mainMenu;
     public ChatList chatList;
@@ -17,8 +16,14 @@ public class Main_View {
     ServiceLocator sl;
 
     public Main_View(Stage primaryStage, Main_Model model){
-        this.stage = primaryStage;
-        this.model = model;
+        super(primaryStage, model);
+
+        stage.setTitle("Messenger");
+        stage.setMinWidth(800);
+        stage.setMinHeight(400);
+    }
+
+    public Scene create_GUI() {
         sl = ServiceLocator.getServiceLocator();
 
         BorderPane root = new BorderPane();
@@ -48,13 +53,11 @@ public class Main_View {
 
         // Stage Settings
         Scene scene = new Scene(root, 700, 500);
-        stage.setTitle("Main_Model");
-        stage.setScene(scene);
-        stage.setMinWidth(800);
-        stage.setMinHeight(400);
 
         String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
+
+        return scene;
     }
 
     public void start(){
@@ -64,8 +67,4 @@ public class Main_View {
     public void stop() {
         stage.hide();
     }
-
-    // public void updateChatsDisplayed(Contact selectedContact) {
-    //    chatWindow.displayMessages(selectedContact.getMessages());
-    //}
 }

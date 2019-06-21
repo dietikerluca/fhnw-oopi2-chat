@@ -4,6 +4,11 @@ import javafx.concurrent.Task;
 import src.ServiceLocator;
 import src.abstractClasses.Model;
 import src.commonClasses.ChatClient;
+import src.commonClasses.Translator;
+import src.commonViews.ErrorPopUp;
+import src.typeClasses.Message;
+
+import java.io.IOException;
 
 public class Login_Model extends Model {
 
@@ -21,15 +26,16 @@ public class Login_Model extends Model {
             @Override
             protected Void call() {
                 loginSuccessful = false;
-                ChatClient chatClient = ServiceLocator.getServiceLocator().getChatClient();
-                loginSuccessful = chatClient.login(username, password);
 
-//            // Buffer
-//            try {
-//                TimeUnit.SECONDS.sleep(7);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+                try {
+                    ChatClient chatClient = ServiceLocator.getServiceLocator().getChatClient();
+                    loginSuccessful = chatClient.login(username, password);
+                } catch (IOException e) {
+                    Translator tr = ServiceLocator.getServiceLocator().getTranslator();
+
+                    ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
+                            tr.getString("buttons.close"));
+                }
 
                 this.updateProgress(6,  6);
                 return null;

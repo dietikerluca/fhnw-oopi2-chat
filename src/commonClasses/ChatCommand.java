@@ -2,11 +2,13 @@ package src.commonClasses;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.time.LocalDateTime;
 
 public class ChatCommand {
     private String command;
     private String returnValue;
     private boolean finished;
+    private LocalDateTime startDate;
 
     private OutputStreamWriter socket;
 
@@ -41,6 +43,7 @@ public class ChatCommand {
     }
 
     public void execute() throws IOException {
+        startDate = LocalDateTime.now();
         socket.write(command + "\n");
         socket.flush();
     }
@@ -50,6 +53,14 @@ public class ChatCommand {
             return "Command: " + command + " Returned: " + returnValue;
         } else {
             return "Command: " + command + " Pending...";
+        }
+    }
+
+    public boolean isTimeout() {
+        if (startDate != null) {
+            return LocalDateTime.now().isAfter(startDate.plusSeconds(2));
+        } else {
+            return false;
         }
     }
 }

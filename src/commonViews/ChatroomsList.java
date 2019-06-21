@@ -11,7 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import src.ServiceLocator;
+import src.commonClasses.Translator;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public class ChatroomsList {
@@ -53,10 +55,17 @@ public class ChatroomsList {
     }
 
     private void getChatroomsList() {
-        String[] chatrooms =  sl.getChatClient().listChatrooms();
+        try {
+            String[] chatrooms =  sl.getChatClient().listChatrooms();
 
-        for (String chatroomName : chatrooms) {
-            chatroomsList.getItems().add(chatroomName);
+            for (String chatroomName : chatrooms) {
+                chatroomsList.getItems().add(chatroomName);
+            }
+        } catch (IOException e) {
+            Translator tr = ServiceLocator.getServiceLocator().getTranslator();
+
+            ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
+                    tr.getString("buttons.close"));
         }
     }
 

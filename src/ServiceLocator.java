@@ -91,6 +91,13 @@ public class ServiceLocator {
         return chatClient;
     }
 
+    public ChatClient getChatClient(boolean forceRecreate) {
+        if (chatClient == null || forceRecreate) {
+            chatClient = new ChatClient(ipAddressPreset, port);
+        }
+        return chatClient;
+    }
+
     public String getIpAddressPreset() {
         return ipAddressPreset;
     }

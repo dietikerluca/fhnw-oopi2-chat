@@ -5,6 +5,7 @@ import src.abstractClasses.Model;
 import src.commonClasses.Translator;
 import javafx.concurrent.Task;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
@@ -15,15 +16,16 @@ public class Splash_Model extends Model {
         super();
     }
 
-    final Task<Void> initializer = new Task<Void>() {
+    final Task<Void> initializer = new Task<>() {
         @Override
-        protected Void call() throws Exception {
+        protected Void call() throws IOException {
             // Real Tasks
             sl = ServiceLocator.getServiceLocator();
             sl.setLogger(configureLogging());
             sl.setTranslator(new Translator("en"));
 
-            sl.getChatClient().connect();
+            boolean connected = sl.getChatClient().connect();
+            if (!connected) throw new IOException("Connection failed");
 
             // Buffer
             try {

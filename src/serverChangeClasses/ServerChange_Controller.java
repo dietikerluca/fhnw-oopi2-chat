@@ -1,16 +1,22 @@
 package src.serverChangeClasses;
 
+import src.ChatApp;
 import src.ServiceLocator;
 import src.abstractClasses.Controller;
 import src.commonClasses.Translator;
 import src.commonViews.ChoicePopUp;
 import src.commonViews.ErrorPopUp;
+import src.splashScreen.Splash_Controller;
+import src.splashScreen.Splash_Model;
+import src.splashScreen.Splash_View;
+import src.typeClasses.Chat;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 public class ServerChange_Controller extends Controller {
 
-    public ServerChange_Controller(ServerChange_Model model, ServerChange_View view) {
+    public ServerChange_Controller(ServerChange_Model model, ServerChange_View view, ChatApp main) {
         super(model, view);
 
         ServiceLocator sl = ServiceLocator.getServiceLocator();
@@ -18,6 +24,7 @@ public class ServerChange_Controller extends Controller {
         Translator tr = sl.getTranslator();
 
         view.confirm.setOnAction(click -> {
+            boolean changesMade = false;
             view.buttonPressed = true;
             logger.fine("Button click: Save");
             if (view.ipAddress.getText().equals("")){
@@ -29,14 +36,27 @@ public class ServerChange_Controller extends Controller {
                 view.ipAddress.getStyleClass().add("invalid");
             } else {
                 ServiceLocator.getServiceLocator().setIpAddressPreset(view.ipAddress.getText());
+                changesMade = true;
                 view.changeButton();
             }
             if (view.port.getText().equals("")){
                 logger.fine("Port field empty");
             } else {
                 ServiceLocator.getServiceLocator().setPort(Integer.parseInt(view.port.getText()));
+                changesMade = true;
                 logger.fine("Save request transmitted.");
                 view.changeButton();
+            }
+
+            if (changesMade) {
+                sl.getChatClient().disconnect();
+                boolean connected = sl.getChatClient(true).connect();
+                if (!connected) {
+                    ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " Unable to connect",
+                            tr.getString("buttons.close"));
+                } else {
+                    view.stop();
+                }
             }
         });
 
