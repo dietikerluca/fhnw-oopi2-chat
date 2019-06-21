@@ -1,14 +1,12 @@
 package src.mainClasses;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import src.ServiceLocator;
 import src.commonClasses.Translator;
-import src.commonViews.ErrorPopUp;
 import src.typeClasses.Chat;
 import src.typeClasses.Message;
 
@@ -16,7 +14,6 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class ChatWindow extends ScrollPane {
@@ -27,7 +24,7 @@ public class ChatWindow extends ScrollPane {
     Translator tr;
     Logger logger;
 
-    public ChatWindow(Main_Model model){
+    public ChatWindow(Main_Model model) {
         this.model = model;
         sl = ServiceLocator.getServiceLocator();
         tr = sl.getTranslator();
@@ -109,25 +106,17 @@ public class ChatWindow extends ScrollPane {
             container.setId("MessageBubbleContainerSent");
         }
 
-        return container;
+        AffineTransform affinetransform = new AffineTransform();
+        FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
+        Font font = new Font("Tahoma", Font.PLAIN, 10);
+
+        int textwidth = (int) (font.getStringBounds(message.getMessage(), frc).getWidth());
+        logger.finest("Calculated message width: " + textwidth);
+
+            messageBox.setMinWidth(textwidth + 100);
+            messageBox.setMaxWidth(textwidth + 100);
+            return container;
+
     }
 
-//    public void displayNewMessage(Message msg){
-        //Message Bubble and TimeBox Styling
-//        AffineTransform affinetransform = new AffineTransform();
-//        FontRenderContext frc = new FontRenderContext(affinetransform,true,true);
-//        Font font = new Font("Tahoma", Font.PLAIN, 10);
-
-//        int textwidth = (int)(font.getStringBounds(msg.getMessage(), frc).getWidth());
-//        logger.finest("Calculated message width: "+textwidth);
-//        if (textwidth >= 220){
-//            ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.messageTooLong"), tr.getString("buttons.close"));
-//            logger.info("Calculated message width: "+textwidth+" extends defined limit");
-//        } else {
-//            message.setMinWidth(textwidth + 50);
-//            message.setMaxWidth(textwidth + 50);
-
-//            chatHistory.getChildren().add(messageBoxContainer);
-//        }
-//    }
 }

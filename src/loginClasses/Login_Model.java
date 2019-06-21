@@ -6,9 +6,9 @@ import src.abstractClasses.Model;
 import src.commonClasses.ChatClient;
 import src.commonClasses.Translator;
 import src.commonViews.ErrorPopUp;
-import src.typeClasses.Message;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Login_Model extends Model {
 
@@ -36,6 +36,12 @@ public class Login_Model extends Model {
                     ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.serverError") + " " + e.getMessage(),
                             tr.getString("buttons.close"));
                 }
+            // Buffer
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
                 this.updateProgress(6,  6);
                 return null;

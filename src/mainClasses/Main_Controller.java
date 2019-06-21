@@ -1,7 +1,5 @@
 package src.mainClasses;
 
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -29,6 +27,8 @@ import src.typeClasses.Person;
 import src.typeClasses.PrivateChat;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -183,9 +183,39 @@ public class Main_Controller {
         });
 
         // Send message
-        view.interactionRibbon.sendBtn.setOnAction(event -> sendMessageAction());
+        view.interactionRibbon.sendBtn.setOnAction(event -> {
+            AffineTransform affinetransform = new AffineTransform();
+            FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
+            Font font = new Font("Tahoma", Font.PLAIN, 10);
+
+            int textwidth = (int) (font.getStringBounds(view.interactionRibbon.messageField.getText(), frc).getWidth());
+            logger.finest("Calculated message width: " + textwidth);
+
+            if (textwidth >= 220) {
+                ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.messageTooLong"),
+                        tr.getString("buttons.close"));
+                logger.info("Calculated message width: " + textwidth + " extends defined limit");
+            } else {
+            sendMessageAction();
+        }
+        });
         view.interactionRibbon.messageField.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) sendMessageAction();
+                if (event.getCode() == KeyCode.ENTER){
+                    AffineTransform affinetransform = new AffineTransform();
+                    FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
+                    Font font = new Font("Tahoma", Font.PLAIN, 10);
+
+                    int textwidth = (int) (font.getStringBounds(view.interactionRibbon.messageField.getText(), frc).getWidth());
+                    logger.finest("Calculated message width: " + textwidth);
+
+                    if (textwidth >= 200) {
+                        ErrorPopUp errorPopUp = new ErrorPopUp(tr.getString("ErrorMessages.messageTooLong"),
+                                tr.getString("buttons.close"));
+                        logger.info("Calculated message width: " + textwidth + " extends defined limit");
+                    } else {
+                        sendMessageAction();
+                    }
+                }
             }
         );
 
@@ -274,7 +304,8 @@ public class Main_Controller {
         if (currentChat != null) {
             model.sendMessage(currentChat, msg);
         } else {
-            ErrorPopUp errorPopUp = new ErrorPopUp("Please select a chat first.", tr.getString("buttons.close"));
+            ErrorPopUp errorPopUp = new ErrorPopUp("Please select a chat first.",
+                    tr.getString("buttons.close"));
         }
     }
 }

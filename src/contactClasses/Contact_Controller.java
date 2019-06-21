@@ -33,6 +33,7 @@ public class Contact_Controller {
                 mainModel.createPrivateChat(contact.getUsername());
                 logger.fine("Contact added to contactslist");
                 contact_view.stop();
+                view.chatList.updateChatList();
 
             } else {
                 logger.fine("Contact Creation from existing person");
@@ -43,6 +44,7 @@ public class Contact_Controller {
                 contact_view.getExisting().setUsername(contact_view.username.getText());
                 contact_view.getExisting().setBlocked(contact_view.blocked.isSelected());
                 contact_view.stop();
+                view.chatList.updateChatList();
             }
         });
 

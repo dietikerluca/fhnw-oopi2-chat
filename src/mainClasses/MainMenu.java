@@ -15,7 +15,7 @@ public class MainMenu extends MenuBar {
 
     Menu messenger, file, help;
     MenuItem login, logout, changePassword, deleteAccount, preferences, quit, newChat, newChatRoom, joinChatRoom, createContact
-            , updates, guidance, testReceived, testContact, reportError;
+            , guidance, reportError;
 
     Image chevronImage;
 
@@ -57,6 +57,8 @@ public class MainMenu extends MenuBar {
         deleteAccount = new MenuItem(t.getString("mainmenu.deleteAccount"));
         preferences = new MenuItem(t.getString("mainmenu.Preferences"));
         quit = new MenuItem(t.getString("mainmenu.Quit"));
+        testReceived = new MenuItem("GenerateTestMessageReceived");
+        testContact = new MenuItem("Generate Test Contact");
 
         messenger.getItems().addAll(login, logout, changePassword, deleteAccount, preferences, quit);
 
@@ -67,11 +69,10 @@ public class MainMenu extends MenuBar {
 
         file.getItems().addAll(newChat, newChatRoom, joinChatRoom, createContact);
 
-        // updates = new MenuItem(t.getString("mainmenu.WriteDeveloper")); //TODO
-        // guidance = new MenuItem(t.getString("mainmenu.Guidance")); //TODO
+        guidance = new MenuItem(t.getString("mainmenu.Guidance")); //TODO
         reportError = new MenuItem(t.getString("mainmenu.reportError")); //TODO
 
-        help.getItems().addAll(/*updates, guidance,*/ reportError);
+        help.getItems().addAll(guidance, reportError);
 
         //Update texts
         updateTexts();
@@ -95,16 +96,13 @@ public class MainMenu extends MenuBar {
         deleteAccount.setText(t.getString("mainmenu.deleteAccount"));
         preferences.setText(t.getString("mainmenu.Preferences"));
         quit.setText(t.getString("mainmenu.Quit"));
-        // testReceived.setText("GenerateTestMessageReceived");
-        // testContact.setText("Generate Test Contact");
 
         newChat.setText(t.getString("mainmenu.newChat"));
         newChatRoom.setText(t.getString("mainmenu.newChatRoom"));
         joinChatRoom.setText(t.getString("mainmenu.joinChatRoom"));
         createContact.setText(t.getString("mainmenu.createContact"));
 
-        // updates.setText(t.getString("mainmenu.WriteDeveloper"));
-        // guidance.setText(t.getString("mainmenu.Guidance"));
+        guidance.setText(t.getString("mainmenu.Guidance"));
 
     }
 }

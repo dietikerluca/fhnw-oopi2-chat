@@ -21,22 +21,21 @@ public class Preferences_Controller extends Controller {
         super(model, view);
         this.main_view = main_view;
 
-//        view.languages.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            logger.info("Detected Language: "+newValue);
-//            if (newValue.equals("Deutsch")) {
-//                ServiceLocator.getServiceLocator().setTranslator(new Translator("de"));
-//                main_view.mainMenu.updateTexts();
-//                view.updateTexts();
-//            }
-//                if (newValue.equals("English")) {
-//                    ServiceLocator.getServiceLocator().setTranslator(new Translator("en"));
-//                    main_view.mainMenu.updateTexts();
-//                    view.updateTexts();
-//                }
-//                view.updateTexts();
-//            }
-//
-//        );
+        view.languages.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            logger.info("Detected Language: "+newValue);
+            if (newValue.equals("Deutsch")) {
+                ServiceLocator.getServiceLocator().setTranslator(new Translator("de"));
+                main_view.mainMenu.updateTexts();
+                view.updateTexts();
+            }
+            if (newValue.equals("English")) {
+                    ServiceLocator.getServiceLocator().setTranslator(new Translator("en"));
+                    main_view.mainMenu.updateTexts();
+                    view.updateTexts();
+                }
+            }
+
+        );
 
 //        TODO vervollständigen
         view.saveSettingsBtn.setOnAction(click -> {

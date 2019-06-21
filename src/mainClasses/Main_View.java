@@ -9,7 +9,7 @@ import src.abstractClasses.View;
 
 public class Main_View extends View<Main_Model> {
     ChatWindow chatWindow;
-    MainMenu mainMenu;
+    public MainMenu mainMenu;
     public ChatList chatList;
     InteractionRibbon interactionRibbon;
     BorderPane chatInteractionContainer;

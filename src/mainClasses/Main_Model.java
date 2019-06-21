@@ -47,7 +47,7 @@ public class Main_Model extends Model {
 
     public void sendMessage(Chat target, String msg) {
         try {
-            Message message = new Message("brad", target.getName(), msg, false);
+            Message message = new Message(username, target.getName(), msg, false);
             target.addMessage(message);
 
             sl.getChatClient().sendMessage(message.getTarget(), message.getMessage());
