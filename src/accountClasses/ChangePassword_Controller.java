@@ -27,9 +27,15 @@ public class ChangePassword_Controller extends Controller {
                         tr.getString("buttons.close"));
                 logger.warning("New passwords do not match");
             } else {
-                // TODO Change password
+                model.changePassword(view.newPassword.getText());
                 view.changeButton();
                 logger.fine("Password change request sent.");
+                if (model.isPasswordChanged()){
+
+                } else {
+                    ErrorPopUp notChanged = new ErrorPopUp(tr.getString("ErrorMessages.pwNotchanged"),
+                            tr.getString("buttons.tryAgain"));
+                }
             }
         });
     }

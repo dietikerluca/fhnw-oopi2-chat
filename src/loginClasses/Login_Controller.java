@@ -38,12 +38,39 @@ public class Login_Controller extends Controller {
             }));
         });
 
+        view.passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER){
+                logger.fine("Key: Enter");
+                view.getStage().setScene(view.getLoginProcess());
+
+                model.setUsername(view.usernameField.getText());
+                model.setPassword(view.passwordField.getText());
+
+                model.initialize();
+                model.getInitializer().stateProperty().addListener(((observable, oldValue, newValue) -> {
+                    if (newValue == Worker.State.SUCCEEDED){
+                        if(model.isLoginSuccessful()) {
+                            view.getStage().setScene(view.getLoginSuccessful());
+                            logger.fine("Login successful");
+                        } else {
+                            view.getStage().setScene(view.getLoginError());
+                            logger.warning("Login not successful");
+                        }
+                    }
+                }));
+            }
+        });
+
         view.closeTryAgain.setOnAction(event -> {
             view.getStage().setScene(view.getScene());
         });
 
         view.closeSuccess.setOnAction(event -> {
             main.startApp(model.getUsername());
+        });
+
+        view.getStage().setOnCloseRequest(closeRequest -> {
+            closeRequest.consume();
         });
     }
 

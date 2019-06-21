@@ -130,4 +130,8 @@ public class Main_Model extends Model {
         PrivateChat newChat = new PrivateChat(person, person.getUsername());
         chats.add(newChat);
     }
+
+    public void addPerson(Person person){
+        persons.add(person);
+    }
 }

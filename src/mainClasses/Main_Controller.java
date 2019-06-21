@@ -85,6 +85,27 @@ public class Main_Controller {
             login_view.start();
         });
 
+        // Logout
+        view.mainMenu.logout.setOnAction(event -> {
+            ChoicePopUp choicePopUp = new ChoicePopUp(tr.getString("labels.logout"),
+                    tr.getString("buttons.logout"), tr.getString("buttons.back"),
+                    tr.getString("windows.logout"), true);
+            choicePopUp.primaryBtn.setOnAction(deleteEvent -> {
+                chatClient.logout();
+                choicePopUp.stop();
+                logger.fine("Userchoice: Logout - Request sent");
+                ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.loggedOut"),
+                        tr.getString("buttons.close"), tr.getString("windows.loggedOut"));
+                deleted.secondaryBtn.setOnAction(close -> {
+                    view.stop();
+                    deleted.stop();
+                });
+            });
+            choicePopUp.secondaryBtn.setOnAction(cancelEvent -> {
+                logger.fine("Usechoice: Stop logging out");
+            });
+        });
+
         // Change Password
         view.mainMenu.changePassword.setOnAction(event -> {
             Stage passwordStage = new Stage();
@@ -101,7 +122,7 @@ public class Main_Controller {
                     tr.getString("buttons.delete"), tr.getString("buttons.back"),
                     tr.getString("windows.deleteAccount"), true);
             choicePopUp.primaryBtn.setOnAction(deleteEvent -> {
-                //TODO Delete Account
+                chatClient.deleteAccount();
                 logger.fine("Userchoice: Delete Account - Request sent");
                 ChoicePopUp deleted = new ChoicePopUp(tr.getString("labels.accountDeleted"),
                         tr.getString("buttons.close"), tr.getString("windows.accountDeleted"));
@@ -109,6 +130,7 @@ public class Main_Controller {
             });
             choicePopUp.secondaryBtn.setOnAction(cancelEvent -> {
                 logger.fine("Usechoice: Stop deleting Account");
+                choicePopUp.stop();
             });
         });
 
@@ -121,6 +143,24 @@ public class Main_Controller {
             preferences_view = new Preferences_View(prefStage, preferences_model);
             prefController = new Preferences_Controller(preferences_view, preferences_model, view);
             preferences_view.start();
+        });
+
+        view.mainMenu.quit.setOnAction(closeRequest -> {
+            ChoicePopUp closePopUp = new ChoicePopUp(tr.getString("labels.closeApp"),
+                    tr.getString("buttons.close"),
+                    tr.getString("buttons.back"),
+                    tr.getString("windows.closeRequest"),
+                    true);
+            closePopUp.primaryBtn.setOnAction(closeChoice -> {
+                closePopUp.stop();
+                view.stop();
+                logger.fine("Userchoice: Close.");
+            });
+            closePopUp.secondaryBtn.setOnAction(goBack -> {
+                closePopUp.stop();
+                logger.fine("Userchoice: Go Back.");
+            });
+
         });
 
         // Send message
@@ -178,6 +218,11 @@ public class Main_Controller {
             CreateChatroom_Controller createChatroom_controller = new CreateChatroom_Controller(
                     createChatroom_model, createChatroom_view);
             createChatroom_view.start();
+        });
+
+        view.mainMenu.createContact.setOnAction(createEvent -> {
+            Contact_View contact_view = new Contact_View(model, view);
+            Contact_Controller contact_controller = new Contact_Controller(model, contact_view, view);
         });
 
         // Edit Person

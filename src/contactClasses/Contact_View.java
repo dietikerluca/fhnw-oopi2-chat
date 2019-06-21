@@ -1,7 +1,5 @@
 package src.contactClasses;
 
-import src.ServiceLocator;
-import src.commonClasses.Translator;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import src.ServiceLocator;
+import src.commonClasses.Translator;
 import src.mainClasses.Main_Model;
 import src.mainClasses.Main_View;
 import src.typeClasses.Person;
@@ -36,6 +36,8 @@ public class Contact_View {
     Logger logger = ServiceLocator.getServiceLocator().getLogger();
 
             public Contact_View(Main_Model mainModel, Main_View mainView){
+                ServiceLocator sl = ServiceLocator.getServiceLocator();
+
                 received = null;
                 this.model = mainModel;
                 VBox verticalBox = new VBox();
@@ -74,7 +76,7 @@ public class Contact_View {
                 Scene scene = new Scene(verticalBox, 400, 350);
 
                 //Link Stylesheet
-                String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+                String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
                 scene.getStylesheets().add(stylesheet);
                 contactStage = new Stage();
                 contactStage.setTitle(tr.getString("windows.newContact"));
@@ -84,8 +86,6 @@ public class Contact_View {
 
                 contactStage.show();
 
-                //Create new Main_Controller
-                Contact_Controller controller = new Contact_Controller(model, this, mainView);
                 logger.config("Contact Main_Controller created.");
 
 
@@ -133,6 +133,7 @@ public class Contact_View {
             }
 
     public Contact_View(Main_Model mainModel, Main_View mainView, Person contact){
+                ServiceLocator sl = ServiceLocator.getServiceLocator();
                 received = contact;
         this.model = mainModel;
         VBox verticalBox = new VBox();
@@ -201,7 +202,7 @@ public class Contact_View {
         Scene scene = new Scene(verticalBox, 400, 350);
 
         //Link Stylesheet
-        String stylesheet = getClass().getResource("stylesheet.css").toExternalForm();
+        String stylesheet = sl.getClass().getResource("stylesheet.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
         contactStage = new Stage();
         contactStage.setTitle(tr.getString("windows.newContact"));
@@ -210,10 +211,6 @@ public class Contact_View {
         contactStage.setMinWidth(400);
 
         contactStage.show();
-
-        //Create new Main_Controller
-        Contact_Controller controller = new Contact_Controller(model, this, mainView);
-
 
         /*Checks if Textfields are empty
          * ---------------------------------*/

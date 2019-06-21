@@ -11,7 +11,7 @@ public class Main_View {
     Main_Model model;
     ChatWindow chatWindow;
     MainMenu mainMenu;
-    ChatList chatList;
+    public ChatList chatList;
     InteractionRibbon interactionRibbon;
     BorderPane chatInteractionContainer;
     ServiceLocator sl;

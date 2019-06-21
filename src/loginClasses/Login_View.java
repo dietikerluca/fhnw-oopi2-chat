@@ -1,8 +1,5 @@
 package src.loginClasses;
 
-import src.ServiceLocator;
-import src.abstractClasses.View;
-import src.commonClasses.Translator;
 import javafx.animation.Animation;
 import javafx.animation.FillTransition;
 import javafx.animation.ParallelTransition;
@@ -20,8 +17,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import src.ServiceLocator;
+import src.abstractClasses.View;
+import src.commonClasses.Translator;
 import src.commonViews.ImageLoader;
 
 import java.util.logging.Logger;
@@ -47,7 +46,6 @@ public class Login_View extends View {
         super(stage, model);
 
         stage.setAlwaysOnTop(true);
-        stage.initStyle(StageStyle.UNDECORATED);
         stage.setAlwaysOnTop(true);
         stage.setMinHeight(400);
         stage.setMinWidth(250);

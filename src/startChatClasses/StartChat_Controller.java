@@ -25,6 +25,7 @@ public class StartChat_Controller extends Controller {
                 logger.warning("No Username entered.");
             } else {
                 model.createPrivateChat(view.sendTo.getText());
+                view.stop();
             }
         });
     }

@@ -5,7 +5,9 @@ import javafx.collections.ObservableList;
 import src.ServiceLocator;
 import src.typeClasses.Message;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -120,6 +122,26 @@ public class ChatClient {
 
         if (response[1].equals("true")) {
             token = response[2];
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean changePassword(String newPassword) {
+        String[] response = sendCommand("ChangePassword|"+ token + "|" + newPassword).parseReturnValue();
+
+        if (response[1].equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean deleteAccount() {
+        String[] response = sendCommand("DeleteLogin|"+ token).parseReturnValue();
+
+        if (response[1].equals("true")) {
             return true;
         } else {
             return false;
